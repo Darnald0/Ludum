@@ -10,11 +10,13 @@ public class IAStateSolide : AIAState
     private bool shot;
     private bool canShoot = true;
     private Vector2 saveDirection;
+    public GameObject arrow;
 
     public override void StateStart()
     {
         _stateMachine.player.transform.localScale *= 2;
         realSpeed = speed;
+        arrow.SetActive(true);
     }
 
     public override void StateUpdate()
@@ -33,6 +35,7 @@ public class IAStateSolide : AIAState
 
         if (shot)
         {
+            arrow.SetActive(false);
             _stateMachine.playerController.rb2D.AddForce(saveDirection * forceThrow);
         }
     }
@@ -54,6 +57,7 @@ public class IAStateSolide : AIAState
         shot = false;
         yield return new WaitForSeconds(0.3f);
         canShoot = true;
+        arrow.SetActive(true);
     }
 
     public override void StateEnd()
@@ -62,6 +66,7 @@ public class IAStateSolide : AIAState
         StopAllCoroutines();
         canShoot = true;
         shot = false;
+        arrow.SetActive(false);
     }
 
     protected override string BuildGameObjectName()
