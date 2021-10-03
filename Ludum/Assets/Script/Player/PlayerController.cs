@@ -28,18 +28,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetMouseButton(0))
+        if (Input.GetKey(KeyCode.X) && _stateMachine._currentStateName != "SOLIDE")
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, 0));
-            float distance;
-            xy.Raycast(ray, out distance);
-            mousePosition = ray.GetPoint(distance);
-            ////////////////  For Camera in Orthographic /////////////////////////
-            //mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            /////////////////////////////////////////////////////////////////////
-            mouseDirection = mousePosition - new Vector2(this.transform.position.x, this.transform.position.y);
-            _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(mouseDirection);
+            _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(this.transform.up);
         }
 
         if (stateManager.stabilityNeutre && !StateN)
@@ -49,7 +40,7 @@ public class PlayerController : MonoBehaviour
             StateN = true;
             StateG = false;
             StateS = false;
-        } 
+        }
 
         if (stateManager.stabilityGaseous && !StateG)
         {
@@ -69,7 +60,7 @@ public class PlayerController : MonoBehaviour
             StateS = true;
         }
 
-        if(_stateMachine._currentStateName == "SOLIDE")
+        if (_stateMachine._currentStateName == "SOLIDE")
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, 0));
@@ -77,6 +68,11 @@ public class PlayerController : MonoBehaviour
             xy.Raycast(ray, out distance);
             mousePosition = ray.GetPoint(distance);
             mouseDirection = mousePosition - new Vector2(this.transform.position.x, this.transform.position.y);
+
+            if (Input.GetMouseButton(0))
+            {
+                _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(mouseDirection);
+            }
 
             float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);

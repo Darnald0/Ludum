@@ -112,23 +112,23 @@ public class IAStateGazeux : AIAState
         _stateMachine.playerController.rb2D.velocity = new Vector2(hz + speedHz, vrt + speedVrt) * Time.deltaTime;
 
         int layerMask=3;
-        if (Input.GetMouseButton(0))
+        if (Input.GetKey(KeyCode.X))
         {
             RaycastHit2D hit = Physics2D.Raycast(_stateMachine.player.transform.position, saveDirection,Mathf.Infinity,layerMask);
             laserHit.position = hit.point;
             //Debug.DrawLine(_stateMachine.player.transform.position, hit.point);
-            _lineRenderer.SetPosition(0, _stateMachine.player.transform.position + new Vector3(saveDirection.x, saveDirection.y, 10));
+            _lineRenderer.SetPosition(0, _stateMachine.player.transform.position + new Vector3(saveDirection.x*2, saveDirection.y*2, 10));
             if (hit.collider)
             {
                 _lineRenderer.SetPosition(1, new Vector3(laserHit.position.x, laserHit.position.y,10));
             }
             else
             {
-                _lineRenderer.SetPosition(1, saveDirection*50);
+                _lineRenderer.SetPosition(1, saveDirection * 50);
             }
             _lineRenderer.enabled = true;
         }
-        else if (Input.GetMouseButtonUp(0))
+        else if (Input.GetKeyUp(KeyCode.X))
         {
             _lineRenderer.enabled = false;
         }
