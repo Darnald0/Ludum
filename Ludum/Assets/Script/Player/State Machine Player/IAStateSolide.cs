@@ -6,6 +6,10 @@ public class IAStateSolide : AIAState
 {
     public int speed;
     private int realSpeed;
+    public float forceThrow;
+    private bool shot;
+    private bool canShoot = true;
+    private Vector2 saveDirection;
 
     public override void StateStart()
     {
@@ -26,11 +30,38 @@ public class IAStateSolide : AIAState
             realSpeed /= 2;
         }
         _stateMachine.playerController.rb2D.velocity = new Vector2(hz * realSpeed, 0) * Time.deltaTime;
+
+        if (shot)
+        {
+            _stateMachine.playerController.rb2D.AddForce(saveDirection * forceThrow);
+        }
+    }
+
+    public override void Shoot(Vector2 mouseDirection)
+    {
+        if (!shot && canShoot)
+        {
+            saveDirection = mouseDirection;
+            StartCoroutine(Shooting());
+        }
+    }
+
+    IEnumerator Shooting()
+    {
+        shot = true;
+        canShoot = false;
+        yield return new WaitForSeconds(0.2f);
+        shot = false;
+        yield return new WaitForSeconds(0.3f);
+        canShoot = true;
     }
 
     public override void StateEnd()
     {
         _stateMachine.player.transform.localScale /= 2;
+        StopAllCoroutines();
+        canShoot = true;
+        shot = false;
     }
 
     protected override string BuildGameObjectName()

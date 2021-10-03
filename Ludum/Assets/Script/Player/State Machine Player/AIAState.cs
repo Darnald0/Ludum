@@ -23,6 +23,8 @@ public abstract class AIAState : MonoBehaviour
 
     public abstract void StateUpdate();
 
+    public abstract void Shoot(Vector2 mouseDirection);
+
     private void OnValidate()
     {
         string gameObjectName = BuildGameObjectName();
