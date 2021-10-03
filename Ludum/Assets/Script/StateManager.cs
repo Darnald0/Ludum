@@ -39,8 +39,7 @@ public class StateManager : MonoBehaviour
 
         if(CurrentState < MaxStability / 4 || CurrentState < -MaxStability / 4)
         {
-            
-            stabilityNeutre = true;
+           stabilityNeutre = true;
            stabilityGaseous = false;
            stabilitySolide = false;
         }

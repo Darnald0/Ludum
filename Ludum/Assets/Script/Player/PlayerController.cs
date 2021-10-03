@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     public float maxHealth;
     public StateManager stateManager;
 
+    private bool StateN = false;
+    private bool StateG = false;
+    private bool StateS = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,22 +42,31 @@ public class PlayerController : MonoBehaviour
             _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(mouseDirection);
         }
 
-        if (stateManager.stabilityNeutre)
+        if (stateManager.stabilityNeutre && !StateN)
         {
             Debug.Log("Neutre state");
             _stateMachine.SetState("NEUTRE");
+            StateN = true;
+            StateG = false;
+            StateS = false;
         } 
 
-        if (stateManager.stabilityGaseous)
+        if (stateManager.stabilityGaseous && !StateG)
         {
             Debug.Log("Gaseous state");
             _stateMachine.SetState("GAZEUX");
+            StateN = false;
+            StateG = true;
+            StateS = false;
         }
 
-        if (stateManager.stabilitySolide)
+        if (stateManager.stabilitySolide && !StateS)
         {
             Debug.Log("Solide state");
             _stateMachine.SetState("SOLIDE");
+            StateN = false;
+            StateG = false;
+            StateS = true;
         }
 
         if(_stateMachine._currentStateName == "SOLIDE")
