@@ -117,10 +117,10 @@ public class IAStateGazeux : AIAState
             RaycastHit2D hit = Physics2D.Raycast(_stateMachine.player.transform.position, saveDirection,Mathf.Infinity,layerMask);
             laserHit.position = hit.point;
             //Debug.DrawLine(_stateMachine.player.transform.position, hit.point);
-            _lineRenderer.SetPosition(0, _stateMachine.player.transform.position + new Vector3(saveDirection.x, saveDirection.y, 0));
+            _lineRenderer.SetPosition(0, _stateMachine.player.transform.position + new Vector3(saveDirection.x, saveDirection.y, 10));
             if (hit.collider)
             {
-                _lineRenderer.SetPosition(1, laserHit.position);
+                _lineRenderer.SetPosition(1, new Vector3(laserHit.position.x, laserHit.position.y,10));
             }
             else
             {

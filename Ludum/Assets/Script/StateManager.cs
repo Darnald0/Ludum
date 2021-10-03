@@ -79,7 +79,7 @@ public class StateManager : MonoBehaviour
             UnstableReady = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.A))// lazzer fire 0.5 par 1 == 10
+        if (Input.GetKeyDown(KeyCode.Q))// lazzer fire 0.5 par 1 == 10
         {
             CurrentState -= fireState; // soit prendre la valeur du tir enemie ou une valeur de base 
         }
