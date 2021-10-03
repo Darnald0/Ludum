@@ -19,6 +19,13 @@ public class StateManager : MonoBehaviour
     [HideInInspector]
     public int waitAnim = 2;
 
+    [HideInInspector]
+    public bool stabilityNeutre = true;
+    [HideInInspector]
+    public bool stabilityGaseous = false;
+    [HideInInspector]
+    public bool stabilitySolide = false;
+
     public void Start()
     {
         CurrentState = 0f;
@@ -32,13 +39,19 @@ public class StateManager : MonoBehaviour
 
         if(CurrentState < MaxStability / 4 || CurrentState < -MaxStability / 4)
         {
-            Debug.Log("neutre state");
+            
+            stabilityNeutre = true;
+           stabilityGaseous = false;
+           stabilitySolide = false;
         }
 
         // il rentre dans le Statu Gazeux
         if (CurrentState >= MaxStability / 4)
         {
             Debug.Log("Gazeux state");
+            stabilityNeutre = false;
+            stabilityGaseous = true;
+            stabilitySolide = false;
             CurrentState += StabilityTimer/2 * Time.deltaTime;
         }
 
@@ -51,6 +64,9 @@ public class StateManager : MonoBehaviour
         if (CurrentState <= -MaxStability / 4)
         {
             Debug.Log("solide state");
+            stabilityNeutre = false;
+            stabilityGaseous = false;
+            stabilitySolide = true;
             CurrentState -= StabilityTimer/2 * Time.deltaTime;
         }
 

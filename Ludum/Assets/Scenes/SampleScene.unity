@@ -573,7 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44d813dc2adcce84b85ef2cd70a0f127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxStability: 100
+  MaxStability: 200
   StabilityTimer: 5
   sliderUnstable: {fileID: 2043785864}
   fireState: 5

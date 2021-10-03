@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public int damage;
     private float health;
     public float maxHealth;
+    public StateManager stateManager;
 
     // Start is called before the first frame update
     void Start()
@@ -38,18 +39,21 @@ public class PlayerController : MonoBehaviour
             _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(mouseDirection);
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (stateManager.stabilityNeutre)
         {
+            Debug.Log("Neutre state");
             _stateMachine.SetState("NEUTRE");
         } 
 
-        if (Input.GetKeyDown(KeyCode.H))
+        if (stateManager.stabilityGaseous)
         {
+            Debug.Log("Gaseous state");
             _stateMachine.SetState("GAZEUX");
         }
 
-        if (Input.GetKeyDown(KeyCode.J))
+        if (stateManager.stabilitySolide)
         {
+            Debug.Log("Solide state");
             _stateMachine.SetState("SOLIDE");
         }
 
