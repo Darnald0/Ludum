@@ -7,37 +7,43 @@ public class EnemyManager : MonoBehaviour
     public enum Type { neutral, solid, gaseous };
     public enum Pattern { MarcheAvant, Diagonale, Stationnaire, ZigZag, Roue, ZigZagSharp };
 
+    [Header("Main value")]
     public Type EnemyType;
     public Pattern pattern;
+    public float hp = 10.0f;
     public float bulletCD = 1.0f;
     public float speed = 2.0f;
     public int scoreValue = 100;
+    public bool isRedInk;
+    [Header("Laser")]
     public float laserTickCD = 0.1f;
     public float laserRange = 10.0f;
     public float laserDamage = 0.1f;
     public float contactDamage = 5.0f;
-
+    [Header("Diagonale")]
     public float diagonaleAngle;
+    [Header("Stationnaire")]
     public float stationnaireDistance;
     public float stationnaireTime;
+    [Header("Zigzag")]
     public float zigZagRange;
+    public float zigzagFrequency;
+    public float zigzagMagnitude;
+    [Header("Roue")]
     public float roueRadius;
+    [Header("ZigZagSharp")]
     public float zigzagsharpRange;
     public float zigzagsharpTime;
     public float zigzagsharpDistance;
-    public float hp = 10.0f;
+
 
     public GameObject bulletPrefab;
     private SpriteRenderer spriteRenderer;
-    public bool isRedInk;
 
     //public bool disableBool;
 
     private Vector2 stationnaireTargetPos;
     private bool stationnaireStopped = false;
-
-    public float zigzagFrequency;
-    public float zigzagMagnitude;
 
     private Vector2 roueCenter;
     private float roueAngle;
