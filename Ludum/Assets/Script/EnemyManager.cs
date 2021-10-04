@@ -82,12 +82,11 @@ public class EnemyManager : MonoBehaviour
         switch (EnemyType)
         {
             case Type.neutral:
-                if(pattern != Pattern.Stationnaire && pattern != Pattern.ZigZagSharp)
+                if (pattern != Pattern.Stationnaire && pattern != Pattern.ZigZagSharp)
                 {
                     waitCD -= timer;
                     if (waitCD < 0)
                     {
-                        Debug.Log("shoot");
                         Quaternion rotation = Quaternion.AngleAxis(-90, Vector3.forward);
                         GameObject save = Instantiate(bulletPrefab, transform.position, rotation);
                         save.GetComponent<Bullet>().isRedInk = isRedInk;
@@ -109,7 +108,16 @@ public class EnemyManager : MonoBehaviour
                     if (hit.collider)
                     {
                         lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
-                        OnLaserHit(hit);
+                        if (hit.transform.tag == "Player")
+                        {
+                            laserCD -= timer;
+                            if (laserCD <= 0)
+                            {
+                                StateManager.instance.GetHit(laserDamage, EnemyType);
+                                laserCD = laserTickCD;
+                            }
+
+                        }
                     }
                     else
                     {
@@ -207,7 +215,6 @@ public class EnemyManager : MonoBehaviour
                     waitCD -= timer;
                     if (waitCD < 0)
                     {
-                        Debug.Log("shoot");
                         Quaternion rotation = Quaternion.AngleAxis(-90, Vector3.forward);
 
                         GameObject save = Instantiate(bulletPrefab, transform.position, rotation);
@@ -218,7 +225,8 @@ public class EnemyManager : MonoBehaviour
                 case Type.solid:
                     break;
                 case Type.gaseous:
-                    int layerMask = 6;
+                    int layerMask = LayerMask.GetMask("Enemy");
+                    layerMask = ~layerMask;
 
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity, layerMask);
                     Vector3 laserHit = hit.point;
@@ -227,7 +235,17 @@ public class EnemyManager : MonoBehaviour
                     if (hit.collider)
                     {
                         lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
-                        OnLaserHit(hit);
+                            Debug.Log("hit");
+                        if (hit.transform.tag == "Player")
+                        {
+                            laserCD -= timer;
+                            if (laserCD <= 0)
+                            {
+                                StateManager.instance.GetHit(laserDamage, EnemyType);
+                                laserCD = laserTickCD;
+                            }
+
+                        }
                     }
                     else
                     {
@@ -260,41 +278,14 @@ public class EnemyManager : MonoBehaviour
             timerStop = false;
         }
     }
-
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("collid");
         if (collision.transform.tag == "Player")
         {
-            collision.transform.GetComponent<StateManager>().GetHit(contactDamage, EnemyType);
+            StateManager.instance.GetHit(contactDamage, EnemyType);
             Destroy(this);
-            //switch (EnemyType)
-            //{
-            //    case Type.neutral:
-            //        SM.GetHit(contactDamage, EnemyType);
-            //        Destroy(this);
-            //        break;
-            //    case Type.solid:
-            //        SM.GetHit(contactDamage, EnemyType);
-            //        Destroy(this);
-            //        break;
-            //    case Type.gaseous:
-            //        SM.GetHit(contactDamage, EnemyType);
-            //        Destroy(this);
-            //        break;
-            //}
-        }
-    }
-
-    public void OnLaserHit(RaycastHit2D hit)
-    {
-        if (hit.transform.tag == "Player")
-        {
-            laserCD -= timer;
-            if (laserCD <= 0)
-            {
-                StateManager.instance.GetHit(laserDamage, EnemyType);
-                laserCD = laserTickCD;
-            }
         }
     }
 
