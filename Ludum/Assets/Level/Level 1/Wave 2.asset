@@ -16,6 +16,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 8863088191727742256, guid: 72b69d75b224f414ba310b3883ede096, type: 3}
-  - {fileID: 8863088191727742256, guid: 72b69d75b224f414ba310b3883ede096, type: 3}
+  - {fileID: 8863088191727742256, guid: acfec0573d4f0634db16300d59d177e1, type: 3}
+  - {fileID: 8863088191727742256, guid: acfec0573d4f0634db16300d59d177e1, type: 3}
   nextWave: 5
