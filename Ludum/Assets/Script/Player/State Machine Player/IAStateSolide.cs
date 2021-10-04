@@ -8,7 +8,7 @@ public class IAStateSolide : AIAState
     public float forceThrow;
     public float gravityToApply;
     private bool shot;
-    private bool canShoot = true;
+    public bool canShoot = true;
     private Vector2 saveDirection;
     public GameObject arrow;
     public PhysicsMaterial2D bounceMaterial;
