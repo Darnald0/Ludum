@@ -6,6 +6,7 @@ using System;
 [CanEditMultipleObjects]
 public class EnemyManagerEditor : Editor
 {
+    SerializedProperty hp;
     SerializedProperty scoreValue;
     SerializedProperty speed;
     SerializedProperty enemyType;
@@ -26,6 +27,7 @@ public class EnemyManagerEditor : Editor
 
     private void OnEnable()
     {
+        hp = serializedObject.FindProperty("hp");
         scoreValue = serializedObject.FindProperty("scoreValue");
         speed = serializedObject.FindProperty("speed");
         enemyType = serializedObject.FindProperty("EnemyType");
@@ -47,6 +49,7 @@ public class EnemyManagerEditor : Editor
     override public void OnInspectorGUI()
     {
         serializedObject.Update();
+        EditorGUILayout.PropertyField(hp);
         EditorGUILayout.PropertyField(scoreValue);
         EditorGUILayout.PropertyField(speed);
         EditorGUILayout.Space();

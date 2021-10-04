@@ -22,6 +22,7 @@ public class EnemyManager : MonoBehaviour
     public float zigzagsharpRange;
     public float zigzagsharpTime;
     public float zigzagsharpDistance;
+    public float hp = 10.0f;
 
     public GameObject bulletPrefab;
     public GameObject droppedBonus;
@@ -69,6 +70,11 @@ public class EnemyManager : MonoBehaviour
         timer = Time.deltaTime;
         Move();
 
+        if (hp <= 0)
+        {
+            Dead();
+        }
+
         switch (EnemyType)
         {
             case Type.neutral:
@@ -92,9 +98,9 @@ public class EnemyManager : MonoBehaviour
                 {
                     int layerMask = 6;
 
-                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity, layerMask);
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, laserRange, layerMask);
                     Vector3 laserHit = hit.point;
-                    //Debug.DrawLine(transform.position, hit.point);
+                    Debug.DrawLine(transform.position, hit.point);
                     lineRenderer.SetPosition(0, transform.position + new Vector3(0, -1, 0));
                     if (hit.collider)
                     {
@@ -248,10 +254,9 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void OnDead(Type type)
+    public void Dead()
     {
-        GameObject bonus = Instantiate(droppedBonus);
-        bonus.GetComponent<Bonus>().OnInstantiate(type);
-        // Incremente score
+        ScoreManager.instance.addScore(scoreValue);
+        Destroy(this);
     }
 }
