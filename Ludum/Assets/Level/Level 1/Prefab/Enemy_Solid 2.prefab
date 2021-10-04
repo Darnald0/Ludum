@@ -98,10 +98,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyType: 1
-  pattern: 5
+  pattern: 0
   hp: 10
   bulletCD: 1
-  speed: 2
+  speed: 25
   scoreValue: 100
   isRedInk: 0
   laserTickCD: 0.1
