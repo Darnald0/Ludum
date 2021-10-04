@@ -32,6 +32,11 @@ public class Bullet : MonoBehaviour
         {
             if(collision.tag != "Player")
             {
+                if(collision.tag == "Enemy")
+                {
+                    var score = collision.GetComponent<EnemyManager>().scoreValue;
+                    ScoreManager.instance.addScore(score);
+                }
                 Destroy(this.gameObject);
             }
 
