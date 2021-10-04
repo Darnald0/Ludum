@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 {
     public int speed;
     public int damage;
-    public bool isPlayerBullet = false;
+    [HideInInspector] public bool isPlayerBullet = false;
 
     private void Start()
     {

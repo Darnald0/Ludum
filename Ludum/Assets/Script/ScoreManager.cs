@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager instance;
+    [HideInInspector]  public static ScoreManager instance = null;
 
     public float pointsPerSecond = 2;
     public TMP_Text scoreText;
