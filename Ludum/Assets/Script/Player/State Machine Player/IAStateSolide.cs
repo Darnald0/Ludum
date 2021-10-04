@@ -5,22 +5,24 @@ using UnityEngine;
 public class IAStateSolide : AIAState
 {
     public int speed;
-    private int realSpeed;
     public float forceThrow;
     public float gravityToApply;
     private bool shot;
-    private bool canShoot = true;
+    public bool canShoot = true;
     private Vector2 saveDirection;
     public GameObject arrow;
     public PhysicsMaterial2D bounceMaterial;
     [HideInInspector]
     public bool touchWall;
+    public AudioClip[] sound;
+    private AudioSource audioSource;
 
     public override void StateStart()
     {
-        _stateMachine.player.transform.localScale *= 2;
+        audioSource = GetComponent<AudioSource>();
+        _stateMachine.player.transform.GetComponent<BoxCollider2D>().size *= 2;
+
         _stateMachine.playerController.rb2D.gravityScale = gravityToApply;
-        realSpeed = speed;
         arrow.SetActive(true);
         _stateMachine.playerController.rb2D.angularDrag = 0;
         _stateMachine.playerController.rb2D.sharedMaterial = bounceMaterial;
@@ -29,23 +31,14 @@ public class IAStateSolide : AIAState
     public override void StateUpdate()
     {
         float hz = Input.GetAxis("Horizontal");
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            realSpeed *= 2;
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            realSpeed /= 2;
-        }
-        _stateMachine.playerController.rb2D.velocity = new Vector2(hz * realSpeed, 0) * Time.deltaTime;
+        _stateMachine.playerController.rb2D.velocity = new Vector2(hz * speed, 0) * Time.deltaTime;
 
         if (shot)
         {
             arrow.SetActive(false);
-            if (!touchWall)
+            if (!touchWall || _stateMachine.playerController.rb2D.velocity == new Vector2(0,0))
             {
-                _stateMachine.playerController.rb2D.AddForce(saveDirection * forceThrow);
+                _stateMachine.playerController.rb2D.AddForce(saveDirection*50* forceThrow);
             }
         }
     }
@@ -54,6 +47,8 @@ public class IAStateSolide : AIAState
     {
         if (!shot && canShoot)
         {
+            int randomSound = Random.Range(0, sound.Length);
+            audioSource.PlayOneShot(sound[randomSound]);
             saveDirection = mouseDirection;
             StartCoroutine(Shooting());
         }
@@ -73,7 +68,8 @@ public class IAStateSolide : AIAState
 
     public override void StateEnd()
     {
-        _stateMachine.player.transform.localScale /= 2;
+        _stateMachine.player.transform.GetComponent<BoxCollider2D>().size /= 2;
+
         _stateMachine.playerController.rb2D.gravityScale = 0;
         StopAllCoroutines();
         canShoot = true;
@@ -82,6 +78,8 @@ public class IAStateSolide : AIAState
 
         _stateMachine.playerController.rb2D.angularDrag = 0.05f;
         _stateMachine.playerController.rb2D.sharedMaterial = null;
+        audioSource.Stop();
+        _stateMachine.playerController.anim.enabled = false;
     }
 
     protected override string BuildGameObjectName()

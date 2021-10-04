@@ -13,6 +13,7 @@ public class EnemyManager : MonoBehaviour
     public Type EnemyType;
     public Pattern pattern;
     public float laserRange = 10.0f;
+    public float laserDamage = 0.1f;
 
     public float diagonaleAngle;
     public float stationnaireDistance;
@@ -22,6 +23,7 @@ public class EnemyManager : MonoBehaviour
     public float zigzagsharpRange;
     public float zigzagsharpTime;
     public float zigzagsharpDistance;
+    public float hp = 10.0f;
 
     public GameObject bulletPrefab;
     public GameObject droppedBonus;
@@ -47,6 +49,7 @@ public class EnemyManager : MonoBehaviour
     private bool timerStop = false;
     private float waitCount;
     private float waitCD;
+    private float laserCD;
 
     private LineRenderer lineRenderer;
 
@@ -68,6 +71,11 @@ public class EnemyManager : MonoBehaviour
     {
         timer = Time.deltaTime;
         Move();
+
+        if (hp <= 0)
+        {
+            Dead();
+        }
 
         switch (EnemyType)
         {
@@ -92,13 +100,14 @@ public class EnemyManager : MonoBehaviour
                 {
                     int layerMask = 6;
 
-                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity, layerMask);
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, laserRange, layerMask);
                     Vector3 laserHit = hit.point;
-                    //Debug.DrawLine(transform.position, hit.point);
+                    Debug.DrawLine(transform.position, hit.point);
                     lineRenderer.SetPosition(0, transform.position + new Vector3(0, -1, 0));
                     if (hit.collider)
                     {
                         lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
+                        OnLaserHit(hit);
                     }
                     else
                     {
@@ -215,6 +224,7 @@ public class EnemyManager : MonoBehaviour
                     if (hit.collider)
                     {
                         lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
+                        OnLaserHit(hit);
                     }
                     else
                     {
@@ -248,10 +258,22 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void OnDead(Type type)
+    public void OnLaserHit(RaycastHit2D hit)
     {
-        GameObject bonus = Instantiate(droppedBonus);
-        bonus.GetComponent<Bonus>().OnInstantiate(type);
-        // Incremente score
+        if (hit.transform.tag == "Player")
+        {
+            laserCD -= timer;
+            if (laserCD <= 0)
+            {
+                StateManager.instance.GetHit(laserDamage, EnemyType);
+                laserCD = laserTickCD;
+            }
+        }
+    }
+
+    public void Dead()
+    {
+        ScoreManager.instance.addScore(scoreValue);
+        Destroy(this);
     }
 }

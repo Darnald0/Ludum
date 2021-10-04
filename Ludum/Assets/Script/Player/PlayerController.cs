@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public Rigidbody2D rb2D;
     private Vector2 mousePosition;
-    private Vector2 mouseDirection;
+    private Vector2 mouseDirection = new Vector2(1,0);
     private IAStateMachine _stateMachine;
     public int damage;
     [HideInInspector]
@@ -23,6 +23,11 @@ public class PlayerController : MonoBehaviour
     private bool StateN = false;
     private bool StateG = false;
     private bool StateS = false;
+
+    public Animator anim;
+
+    private bool right = true;
+    private bool up = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +43,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetKey(KeyCode.X) && _stateMachine._currentStateName != "SOLIDE")
+        if (Input.GetKey(KeyCode.Space) && _stateMachine._currentStateName != "SOLIDE")
         {
             _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(this.transform.up);
         }
@@ -72,14 +77,48 @@ public class PlayerController : MonoBehaviour
 
         if (_stateMachine._currentStateName == "SOLIDE")
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, 0));
-            float distance;
-            xy.Raycast(ray, out distance);
-            mousePosition = ray.GetPoint(distance);
-            mouseDirection = mousePosition - new Vector2(this.transform.position.x, this.transform.position.y);
+            //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, 0));
+            //float distance;
+            //xy.Raycast(ray, out distance);
+            //mousePosition = ray.GetPoint(distance);
+            //mouseDirection = mousePosition - new Vector2(this.transform.position.x, this.transform.position.y);
 
-            if (Input.GetMouseButton(0))
+            if (mouseDirection.y<=1 && right)
+            {
+                mouseDirection.y += 1 * Time.deltaTime;
+                if (mouseDirection.y >= 1)
+                {
+                    right = false;
+                }
+            }
+            else if(mouseDirection.y >=-1 && !right)
+            {
+                mouseDirection.y -= 1 * Time.deltaTime;
+                if (mouseDirection.y <= -1)
+                {
+                    right = true;
+                }
+            }
+
+            if (mouseDirection.x <= 1 && up)
+            {
+                mouseDirection.x += 1 * Time.deltaTime;
+                if (mouseDirection.x >= 1)
+                {
+                    up = false;
+                }
+            }
+            else if (mouseDirection.x >= -1 && !up)
+            {
+                mouseDirection.x -= 1 * Time.deltaTime;
+                if (mouseDirection.x <= -1)
+                {
+                    up = true;
+                }
+            }
+
+            if (Input.GetKey(KeyCode.Space))
             {
                 _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(mouseDirection);
             }
@@ -126,6 +165,10 @@ public class PlayerController : MonoBehaviour
         if (_stateMachine._currentStateName == "SOLIDE")
         {
             _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().touchWall = true;
+        }
+        if(_stateMachine._currentStateName == "SOLIDE" && collision.gameObject.tag == "Enemy" && _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().canShoot)
+        {
+            collision.gameObject.GetComponent<EnemyManager>().hp -= damage;
         }
     }
 

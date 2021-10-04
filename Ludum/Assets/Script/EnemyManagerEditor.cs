@@ -6,6 +6,7 @@ using System;
 [CanEditMultipleObjects]
 public class EnemyManagerEditor : Editor
 {
+    SerializedProperty hp;
     SerializedProperty scoreValue;
     SerializedProperty speed;
     SerializedProperty enemyType;
@@ -23,9 +24,11 @@ public class EnemyManagerEditor : Editor
     SerializedProperty zigzagsharpDistance;
     SerializedProperty zigzagsharpTime;
     SerializedProperty bulletPrefab;
+    SerializedProperty laserDamage;
 
     private void OnEnable()
     {
+        hp = serializedObject.FindProperty("hp");
         scoreValue = serializedObject.FindProperty("scoreValue");
         speed = serializedObject.FindProperty("speed");
         enemyType = serializedObject.FindProperty("EnemyType");
@@ -43,10 +46,12 @@ public class EnemyManagerEditor : Editor
         zigzagsharpDistance = serializedObject.FindProperty("zigzagsharpDistance");
         zigzagsharpTime = serializedObject.FindProperty("zigzagsharpTime");
         bulletPrefab = serializedObject.FindProperty("bulletPrefab");
+        laserDamage = serializedObject.FindProperty("laserDamage");
     }
     override public void OnInspectorGUI()
     {
         serializedObject.Update();
+        EditorGUILayout.PropertyField(hp);
         EditorGUILayout.PropertyField(scoreValue);
         EditorGUILayout.PropertyField(speed);
         EditorGUILayout.Space();
@@ -74,6 +79,7 @@ public class EnemyManagerEditor : Editor
                     break;
                 case EnemyManager.Type.gaseous:
                     EditorGUILayout.PropertyField(laserTickCD);
+                    EditorGUILayout.PropertyField(laserDamage);
                     EditorGUILayout.PropertyField(laserRange);
                     //myScript.laserTickCD = EditorGUILayout.FloatField("Laser tick cooldown", myScript.laserTickCD);
                     //myScript.laserRange = EditorGUILayout.FloatField("Laser range", myScript.laserRange);

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class StateManager : MonoBehaviour
 {
+    public static StateManager instance;
     public PlayerController playerController;
 
     public int MaxStability;
@@ -34,53 +35,90 @@ public class StateManager : MonoBehaviour
     public Sprite TeteGazeux;
     public Sprite TeteSolide;
 
+    private AudioSource audioSource;
+
+    public Sprite playerGaz;
+    public Sprite playerGaz2;
+    public Sprite playerNeutre;
+    public Sprite playerSolid;
+    public Sprite playerSolid2;
+
+    public void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public void Start()
     {
         CurrentState = 0f;
         sliderUnstable.maxValue = MaxStability;
         sliderUnstable.minValue = -MaxStability;
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void Update()
     {
         SetUnstable(CurrentState);
 
-        if(CurrentState < MaxStability / 4 || CurrentState < -MaxStability / 4)
+        if(CurrentState < MaxStability / 4 && CurrentState > -MaxStability / 4)
         {
             Tete.sprite = TeteNeutre;
             stabilityNeutre = true;
             stabilityGaseous = false;
             stabilitySolide = false;
+            audioSource.Stop();
+            playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerNeutre;
         }
 
         // il rentre dans le Statu Gazeux
-        if (CurrentState >= MaxStability / 4)
+        if (CurrentState >= MaxStability / 2)
+        {
+            CurrentState += StabilityTimer * Time.deltaTime;
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+            playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerGaz2;
+        }
+        else if (CurrentState >= MaxStability / 4)
         {
             Tete.sprite = TeteGazeux;
             stabilityNeutre = false;
             stabilityGaseous = true;
             stabilitySolide = false;
             CurrentState += StabilityTimer/2 * Time.deltaTime;
-        }
-
-        if (CurrentState >= MaxStability / 2)
-        {
-            CurrentState += StabilityTimer * Time.deltaTime;
+            audioSource.Stop();
+            playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerGaz;
         }
 
         // il rentre dans le Statu solide
-        if (CurrentState <= -MaxStability / 4)
+        if (CurrentState <= -MaxStability / 2)
+        {
+            CurrentState -= StabilityTimer * Time.deltaTime;
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+                playerController.anim.enabled = true;
+                Debug.Log("Launch");
+            }
+            //playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerSolid2;
+        }
+        else if (CurrentState <= -MaxStability / 4)
         {
             Tete.sprite = TeteSolide;
             stabilityNeutre = false;
             stabilityGaseous = false;
             stabilitySolide = true;
             CurrentState -= StabilityTimer/2 * Time.deltaTime;
-        }
-
-        if (CurrentState <= -MaxStability / 2)
-        {
-            CurrentState -= StabilityTimer * Time.deltaTime;
+            audioSource.Stop();
+            playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerSolid;
+            playerController.anim.enabled = false;
         }
 
         if (CurrentState >= MaxStability || CurrentState <= -MaxStability)
@@ -101,6 +139,19 @@ public class StateManager : MonoBehaviour
         if (UnstableReady)
         {
             UnstableAnim();
+        }
+    }
+
+    public void GetHit(float value, EnemyManager.Type type)
+    {
+        if (type == EnemyManager.Type.gaseous)
+        {
+            CurrentState += fireState;
+        }
+
+        if (type == EnemyManager.Type.neutral)
+        {
+            CurrentState -= fireState;
         }
     }
 

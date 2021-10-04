@@ -174,8 +174,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb2D: {fileID: 0}
   damage: 0
-  maxHealth: 100
+  life: 0
+  maxLife: 0
   stateManager: {fileID: 0}
+  Life1: {fileID: 0}
+  Life2: {fileID: 0}
+  Life3: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!50 &5777798
 Rigidbody2D:
   serializedVersion: 4
@@ -490,6 +495,7 @@ MonoBehaviour:
   deceleration: 1500
   timeMultipicateur: 2
   laserRange: 0
+  sound: []
 --- !u!120 &257764383
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -750,6 +756,7 @@ MonoBehaviour:
   arrow: {fileID: 1224736147}
   bounceMaterial: {fileID: 0}
   touchWall: 0
+  sound: []
 --- !u!1001 &316861596
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -757,6 +764,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1038295616773682907, guid: 72b69d75b224f414ba310b3883ede096, type: 3}
+      propertyPath: EnemyType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1670907386115645309, guid: 72b69d75b224f414ba310b3883ede096, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1280,6 +1291,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6466802838509324902, guid: 57179d59e85c6824c934b4d7e6c73e8e, type: 3}
+      propertyPath: pattern
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6466802838509324902, guid: 57179d59e85c6824c934b4d7e6c73e8e, type: 3}
+      propertyPath: zigzagFrequency
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6466802838509324902, guid: 57179d59e85c6824c934b4d7e6c73e8e, type: 3}
+      propertyPath: zigzagMagnitude
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57179d59e85c6824c934b4d7e6c73e8e, type: 3}
 --- !u!1 &1276506655
@@ -1502,6 +1525,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6466802838509324902, guid: 57179d59e85c6824c934b4d7e6c73e8e, type: 3}
+      propertyPath: pattern
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6466802838509324902, guid: 57179d59e85c6824c934b4d7e6c73e8e, type: 3}
+      propertyPath: zigzagsharpTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6466802838509324902, guid: 57179d59e85c6824c934b4d7e6c73e8e, type: 3}
+      propertyPath: zigzagsharpRange
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6466802838509324902, guid: 57179d59e85c6824c934b4d7e6c73e8e, type: 3}
+      propertyPath: zigzagsharpDistance
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57179d59e85c6824c934b4d7e6c73e8e, type: 3}
 --- !u!1 &1637560707
@@ -1628,6 +1667,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4000
   bullet: {fileID: 2297132012747926877, guid: b1d09fd61651f774e90e5ff8aa03e4c9, type: 3}
+  sound: []
 --- !u!1001 &1972504937
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1635,6 +1675,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1038295616773682907, guid: 72b69d75b224f414ba310b3883ede096, type: 3}
+      propertyPath: pattern
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038295616773682907, guid: 72b69d75b224f414ba310b3883ede096, type: 3}
+      propertyPath: roueRadius
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1670907386115645309, guid: 72b69d75b224f414ba310b3883ede096, type: 3}
       propertyPath: m_RootOrder
       value: 11

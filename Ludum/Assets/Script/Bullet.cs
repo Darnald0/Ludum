@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public int speed;
-
+    public int damage;
     public bool isPlayerBullet = false;
 
     private void Start()
@@ -32,6 +32,12 @@ public class Bullet : MonoBehaviour
         {
             if(collision.tag != "Player")
             {
+                //if(collision.tag == "Enemy")
+                //{
+                //    var score = collision.GetComponent<EnemyManager>().scoreValue;
+                //    ScoreManager.instance.addScore(score);
+                //}
+                collision.GetComponent<EnemyManager>().hp -= damage;
                 Destroy(this.gameObject);
             }
 
@@ -41,6 +47,7 @@ public class Bullet : MonoBehaviour
         {
             if(collision.tag == "Player")
             {
+                StateManager.instance.GetHit(damage, EnemyManager.Type.neutral);
                 Destroy(this.gameObject);
             }
         }
