@@ -56,11 +56,11 @@ public class Bullet : MonoBehaviour
             {
                 if (isRedInk)
                 {
-                    StateManager.instance.GetHit(damage, EnemyManager.Type.neutral);
+                    StateManager.instance.GetHit(-damage, EnemyManager.Type.neutral);
                     Destroy(this.gameObject);
                 } else
                 {
-                    StateManager.instance.GetHit(-damage, EnemyManager.Type.neutral);
+                    StateManager.instance.GetHit(damage, EnemyManager.Type.neutral);
                     Destroy(this.gameObject);
                 }
             }
