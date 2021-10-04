@@ -279,7 +279,7 @@ public class EnemyManager : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.tag == "Player")
+        if (collision.gameObject.layer == 3)
         {
             StateManager.instance.GetHit(contactDamage, EnemyType);
             Destroy(this.gameObject);
