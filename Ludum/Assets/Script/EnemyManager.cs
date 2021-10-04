@@ -48,6 +48,7 @@ public class EnemyManager : MonoBehaviour
     private bool timerStop = false;
     private float waitCount;
     private float waitCD;
+    private float laserCD;
 
     private LineRenderer lineRenderer;
 
@@ -105,6 +106,7 @@ public class EnemyManager : MonoBehaviour
                     if (hit.collider)
                     {
                         lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
+                        OnLaserHit(hit);
                     }
                     else
                     {
@@ -221,6 +223,7 @@ public class EnemyManager : MonoBehaviour
                     if (hit.collider)
                     {
                         lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
+                        OnLaserHit(hit);
                     }
                     else
                     {
@@ -251,6 +254,19 @@ public class EnemyManager : MonoBehaviour
             }
             lineRenderer.enabled = false;
             timerStop = false;
+        }
+    }
+
+    public void OnLaserHit(RaycastHit2D hit)
+    {
+        if (hit.transform.tag == "Player")
+        {
+            laserCD -= timer;
+            if (laserCD <= 0)
+            {
+                //DO SOMETHING TO PLAYER
+                laserCD = laserTickCD;
+            }
         }
     }
 
