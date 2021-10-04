@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class StateManager : MonoBehaviour
 {
+    public PlayerController playerController;
+
     public int MaxStability;
     public int StabilityTimer = 5;
 
@@ -26,6 +28,12 @@ public class StateManager : MonoBehaviour
     [HideInInspector]
     public bool stabilitySolide = false;
 
+    public Image Tete;
+
+    public Sprite TeteNeutre;
+    public Sprite TeteGazeux;
+    public Sprite TeteSolide;
+
     public void Start()
     {
         CurrentState = 0f;
@@ -39,15 +47,16 @@ public class StateManager : MonoBehaviour
 
         if(CurrentState < MaxStability / 4 || CurrentState < -MaxStability / 4)
         {
-           stabilityNeutre = true;
-           stabilityGaseous = false;
-           stabilitySolide = false;
+            Tete.sprite = TeteNeutre;
+            stabilityNeutre = true;
+            stabilityGaseous = false;
+            stabilitySolide = false;
         }
 
         // il rentre dans le Statu Gazeux
         if (CurrentState >= MaxStability / 4)
         {
-            Debug.Log("Gazeux state");
+            Tete.sprite = TeteGazeux;
             stabilityNeutre = false;
             stabilityGaseous = true;
             stabilitySolide = false;
@@ -62,7 +71,7 @@ public class StateManager : MonoBehaviour
         // il rentre dans le Statu solide
         if (CurrentState <= -MaxStability / 4)
         {
-            Debug.Log("solide state");
+            Tete.sprite = TeteSolide;
             stabilityNeutre = false;
             stabilityGaseous = false;
             stabilitySolide = true;
@@ -79,14 +88,14 @@ public class StateManager : MonoBehaviour
             UnstableReady = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))// lazzer fire 0.5 par 1 == 10
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            CurrentState -= fireState; // soit prendre la valeur du tir enemie ou une valeur de base 
+            CurrentState -= fireState;
         }
 
-        if (Input.GetKeyDown(KeyCode.E))// bullet fire 1 == 5
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            CurrentState += fireState; // probleme laser nick cette mechanic
+            CurrentState += fireState;
         }
 
         if (UnstableReady)
@@ -101,13 +110,9 @@ public class StateManager : MonoBehaviour
     }
     public void UnstableAnim()
     {
-        Debug.Log("EXPLOSION!!!!! putaiinnn ...");
         UnstableReady = false;
-        //StartCoroutine(Wait(waitAnim));
-        //Player.Life --;
+        playerController.life --;
         CurrentState = 0;
-
-
     }
 
     //IEnumerator Wait(int waitAnim)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,10 +11,15 @@ public class PlayerController : MonoBehaviour
     private Vector2 mouseDirection;
     private IAStateMachine _stateMachine;
     public int damage;
-    private float health;
-    public float maxHealth;
+    [HideInInspector]
+    public float life;
+    public float maxLife;
     public StateManager stateManager;
 
+    public GameObject Life1;
+    public GameObject Life2;
+    public GameObject Life3;
+    // Securite State
     private bool StateN = false;
     private bool StateG = false;
     private bool StateS = false;
@@ -22,6 +28,10 @@ public class PlayerController : MonoBehaviour
     {
         rb2D = GetComponent<Rigidbody2D>();
         _stateMachine = GetComponentInChildren<IAStateMachine>();
+        Life1.SetActive(true);
+        Life2.SetActive(true);
+        Life3.SetActive(true);
+        life = maxLife;
     }
 
     // Update is called once per frame
@@ -81,12 +91,39 @@ public class PlayerController : MonoBehaviour
             _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().arrow.transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1);
         }
 
+        if(life == 3)
+        {
+            Life1.SetActive(true);
+            Life2.SetActive(true);
+            Life3.SetActive(true);
+        }
+
+        if (life == 2)
+        {
+            Life1.SetActive(false);
+            Life2.SetActive(true);
+            Life3.SetActive(true);
+        }
+        if (life == 1)
+        {
+            Life1.SetActive(false);
+            Life2.SetActive(false);
+            Life3.SetActive(true);
+        }
+        if (life == 0)
+        {
+            Life1.SetActive(false);
+            Life2.SetActive(false);
+            Life3.SetActive(false);
+            Death();
+        }
+
     }
 
     void GetDamage(float dmg)
     {
-        health -= dmg;
-        if (health <= 0)
+        life -= dmg;
+        if (life <= 0)
         {
             Death();
         }
@@ -94,6 +131,6 @@ public class PlayerController : MonoBehaviour
 
     void Death()
     {
-        Destroy(this.gameObject);
+
     }
 }

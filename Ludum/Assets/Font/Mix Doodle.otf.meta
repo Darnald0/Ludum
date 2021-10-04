@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 4d4bbd49cd548f44a9ad3aa5e7c260bd
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Mixdoodle
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 3bc1fea097e38f4439bf306f4aa87c1c, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
