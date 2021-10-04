@@ -16,6 +16,7 @@ public class IAStateGazeux : AIAState
     public AudioClip[] sound;
     private AudioSource audioSource;
     private int randomSound;
+    public int damage;
 
     public override void StateStart()
     {
@@ -134,6 +135,10 @@ public class IAStateGazeux : AIAState
             if (hit.collider)
             {
                 _lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y,0));
+                if(hit.collider.tag == "Enemy")
+                {
+                    hit.collider.GetComponent<EnemyManager>().hp -= damage;
+                }
             }
             else
             {

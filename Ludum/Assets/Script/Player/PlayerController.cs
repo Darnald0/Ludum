@@ -166,6 +166,10 @@ public class PlayerController : MonoBehaviour
         {
             _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().touchWall = true;
         }
+        if(_stateMachine._currentStateName == "SOLIDE" && collision.gameObject.tag == "Enemy" && _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().canShoot)
+        {
+            collision.gameObject.GetComponent<EnemyManager>().hp -= damage;
+        }
     }
 
     void GetDamage(float dmg)
