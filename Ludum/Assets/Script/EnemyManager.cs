@@ -99,7 +99,8 @@ public class EnemyManager : MonoBehaviour
             case Type.gaseous:
                 if (pattern != Pattern.Stationnaire && pattern != Pattern.ZigZagSharp)
                 {
-                    int layerMask = 6;
+                    int layerMask = LayerMask.GetMask("Enemy");
+                    layerMask = ~layerMask;
 
                     RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, laserRange, layerMask);
                     Vector3 laserHit = hit.point;
@@ -108,7 +109,7 @@ public class EnemyManager : MonoBehaviour
                     if (hit.collider)
                     {
                         lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
-                        if (hit.transform.tag == "Player")
+                        if (hit.collider.transform.tag == "Player")
                         {
                             laserCD -= timer;
                             if (laserCD <= 0)
@@ -236,7 +237,7 @@ public class EnemyManager : MonoBehaviour
                     {
                         lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
                             Debug.Log("hit");
-                        if (hit.transform.tag == "Player")
+                        if (hit.collider.transform.tag == "Player")
                         {
                             laserCD -= timer;
                             if (laserCD <= 0)
@@ -281,17 +282,16 @@ public class EnemyManager : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("collid");
         if (collision.transform.tag == "Player")
         {
             StateManager.instance.GetHit(contactDamage, EnemyType);
-            Destroy(this);
+            Destroy(this.gameObject);
         }
     }
 
     public void Dead()
     {
         ScoreManager.instance.addScore(scoreValue);
-        Destroy(this);
+        Destroy(this.gameObject);
     }
 }
