@@ -6,36 +6,29 @@ using UnityEditor;
 public class IAStateNeutre : AIAState
 {
     public int speed;
-    private int realSpeed;
-
     public GameObject bullet;
     private bool canShoot = true;
+    public AudioClip[] sound;
+    private AudioSource audioSource;
+
     public override void StateStart()
     {
-        realSpeed = speed;
+        audioSource = GetComponent<AudioSource>();
     }
 
     public override void StateUpdate()
     {
         float hz = Input.GetAxis("Horizontal");
         float vrt = Input.GetAxis("Vertical");
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            realSpeed *= 2;
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            realSpeed /= 2;
-        }
-
-        _stateMachine.playerController.rb2D.velocity = new Vector2(hz * realSpeed, vrt * realSpeed) * Time.deltaTime;
+        _stateMachine.playerController.rb2D.velocity = new Vector2(hz * speed, vrt * speed) * Time.deltaTime;
     }
 
     public override void Shoot(Vector2 mouseDirection)
     {
         if (canShoot)
         {
+            int randomSound = Random.Range(0, sound.Length);
+            audioSource.PlayOneShot(sound[randomSound]);
             float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             GameObject save = Instantiate(bullet, transform.position + new Vector3(mouseDirection.normalized.x * 10, mouseDirection.normalized.y * 10, 0), Quaternion.Slerp(transform.rotation, rotation, 1));

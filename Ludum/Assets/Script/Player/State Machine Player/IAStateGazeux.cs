@@ -13,13 +13,18 @@ public class IAStateGazeux : AIAState
     private LineRenderer _lineRenderer;
     private Vector2 saveDirection;
     public int laserRange;
+    public AudioClip[] sound;
+    private AudioSource audioSource;
+    private int randomSound;
 
     public override void StateStart()
     {
-        _stateMachine.player.transform.localScale /= 2;
+        audioSource = GetComponent<AudioSource>();
+        _stateMachine.player.transform.GetComponent<BoxCollider2D>().size /= 2;
         _lineRenderer = GetComponent<LineRenderer>();
         _lineRenderer.enabled = false;
         _lineRenderer.useWorldSpace = true;
+        randomSound = Random.Range(0, sound.Length);
     }
 
     public override void StateUpdate()
@@ -111,8 +116,16 @@ public class IAStateGazeux : AIAState
 
         _stateMachine.playerController.rb2D.velocity = new Vector2(hz + speedHz, vrt + speedVrt) * Time.deltaTime;
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            audioSource.clip = null;
+            audioSource.clip = sound[randomSound];
+            audioSource.Play();
+        }
+
+
         int layerMask=3;
-        if (Input.GetKey(KeyCode.X))
+        if (Input.GetKey(KeyCode.Space))
         {
             RaycastHit2D hit = Physics2D.Raycast(_stateMachine.player.transform.position, saveDirection, laserRange, layerMask);
             Vector3 laserHit;
@@ -129,9 +142,11 @@ public class IAStateGazeux : AIAState
             }
             _lineRenderer.enabled = true;
         }
-        else if (Input.GetKeyUp(KeyCode.X))
+        else if (Input.GetKeyUp(KeyCode.Space))
         {
             _lineRenderer.enabled = false;
+            audioSource.Stop();
+            randomSound = Random.Range(0, sound.Length);
         }
     }
 
@@ -143,7 +158,7 @@ public class IAStateGazeux : AIAState
     public override void StateEnd()
     {
         _lineRenderer.enabled = false;
-        _stateMachine.player.transform.localScale *= 2;
+        _stateMachine.player.transform.GetComponent<BoxCollider2D>().size *= 2;
     }
 
     protected override string BuildGameObjectName()

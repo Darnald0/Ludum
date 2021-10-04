@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetKey(KeyCode.X) && _stateMachine._currentStateName != "SOLIDE")
+        if (Input.GetKey(KeyCode.Space) && _stateMachine._currentStateName != "SOLIDE")
         {
             _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(this.transform.up);
         }
