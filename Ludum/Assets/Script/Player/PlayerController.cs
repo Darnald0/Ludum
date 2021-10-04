@@ -12,7 +12,11 @@ public class PlayerController : MonoBehaviour
     public int damage;
     private float health;
     public float maxHealth;
+    public StateManager stateManager;
 
+    private bool StateN = false;
+    private bool StateG = false;
+    private bool StateS = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,36 +28,39 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetMouseButton(0))
+        if (Input.GetKey(KeyCode.X) && _stateMachine._currentStateName != "SOLIDE")
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, 0));
-            float distance;
-            xy.Raycast(ray, out distance);
-            mousePosition = ray.GetPoint(distance);
-            ////////////////  For Camera in Orthographic /////////////////////////
-            //mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            /////////////////////////////////////////////////////////////////////
-            mouseDirection = mousePosition - new Vector2(this.transform.position.x, this.transform.position.y);
-            _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(mouseDirection);
+            _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(this.transform.up);
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (stateManager.stabilityNeutre && !StateN)
         {
+            Debug.Log("Neutre state");
             _stateMachine.SetState("NEUTRE");
-        } 
+            StateN = true;
+            StateG = false;
+            StateS = false;
+        }
 
-        if (Input.GetKeyDown(KeyCode.H))
+        if (stateManager.stabilityGaseous && !StateG)
         {
+            Debug.Log("Gaseous state");
             _stateMachine.SetState("GAZEUX");
+            StateN = false;
+            StateG = true;
+            StateS = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.J))
+        if (stateManager.stabilitySolide && !StateS)
         {
+            Debug.Log("Solide state");
             _stateMachine.SetState("SOLIDE");
+            StateN = false;
+            StateG = false;
+            StateS = true;
         }
 
-        if(_stateMachine._currentStateName == "SOLIDE")
+        if (_stateMachine._currentStateName == "SOLIDE")
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, 0));
@@ -61,6 +68,11 @@ public class PlayerController : MonoBehaviour
             xy.Raycast(ray, out distance);
             mousePosition = ray.GetPoint(distance);
             mouseDirection = mousePosition - new Vector2(this.transform.position.x, this.transform.position.y);
+
+            if (Input.GetMouseButton(0))
+            {
+                _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(mouseDirection);
+            }
 
             float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
