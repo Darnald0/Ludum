@@ -38,7 +38,7 @@ public class IAStateNeutre : AIAState
         {
             float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            GameObject save = Instantiate(bullet, transform.position + new Vector3(mouseDirection.normalized.x * 6, mouseDirection.normalized.y * 6, 0), Quaternion.Slerp(transform.rotation, rotation, 1));
+            GameObject save = Instantiate(bullet, transform.position + new Vector3(mouseDirection.normalized.x * 10, mouseDirection.normalized.y * 10, 0), Quaternion.Slerp(transform.rotation, rotation, 1));
             save.tag = "Player";
             StartCoroutine(ShootDelay());
         }
