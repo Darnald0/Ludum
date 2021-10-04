@@ -6,12 +6,13 @@ public class EnemyManager : MonoBehaviour
 {
     public enum Type { neutral, solid, gaseous };
     public enum Pattern { MarcheAvant, Diagonale, Stationnaire, ZigZag, Roue, ZigZagSharp };
-    public float bulletCD = 1.0f;
-    public float laserTickCD = 0.1f;
-    public float speed = 2.0f;
-    public int scoreValue = 100;
+
     public Type EnemyType;
     public Pattern pattern;
+    public float bulletCD = 1.0f;
+    public float speed = 2.0f;
+    public int scoreValue = 100;
+    public float laserTickCD = 0.1f;
     public float laserRange = 10.0f;
     public float laserDamage = 0.1f;
     public float contactDamage = 5.0f;
@@ -27,14 +28,10 @@ public class EnemyManager : MonoBehaviour
     public float hp = 10.0f;
 
     public GameObject bulletPrefab;
-    public GameObject droppedBonus;
-    public Sprite neutral;
-    public Sprite solid;
-    public Sprite gazeous;
-    public SpriteRenderer spriteRenderer;
+    private SpriteRenderer spriteRenderer;
     public bool isRedInk;
 
-    public bool disableBool;
+    //public bool disableBool;
 
     private Vector2 stationnaireTargetPos;
     private bool stationnaireStopped = false;
@@ -281,17 +278,16 @@ public class EnemyManager : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("collid");
         if (collision.transform.tag == "Player")
         {
             StateManager.instance.GetHit(contactDamage, EnemyType);
-            Destroy(this);
+            Destroy(this.gameObject);
         }
     }
 
     public void Dead()
     {
         ScoreManager.instance.addScore(scoreValue);
-        Destroy(this);
+        Destroy(this.gameObject);
     }
 }
