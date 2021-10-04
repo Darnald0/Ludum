@@ -17,6 +17,7 @@ public class IAStateGazeux : AIAState
     private AudioSource audioSource;
     private int randomSound;
     public int damage;
+    private bool canDamage = true;
 
     public override void StateStart()
     {
@@ -135,9 +136,10 @@ public class IAStateGazeux : AIAState
             if (hit.collider)
             {
                 _lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y,0));
-                if(hit.collider.tag == "Enemy")
+                if(hit.collider.tag == "Enemy" && canDamage)
                 {
                     hit.collider.GetComponent<EnemyManager>().hp -= damage;
+                    StartCoroutine(canDoDamage());
                 }
             }
             else
@@ -154,6 +156,13 @@ public class IAStateGazeux : AIAState
         }
     }
 
+    IEnumerator canDoDamage()
+    {
+        canDamage = false;
+        yield return new WaitForSeconds(0.2f);
+        canDamage = true;
+    }
+
     public override void Shoot(Vector2 mouseDirection)
     {
         saveDirection = new Vector2(mouseDirection.normalized.x * 2, mouseDirection.normalized.y * 2);
@@ -164,6 +173,7 @@ public class IAStateGazeux : AIAState
         _lineRenderer.enabled = false;
         _stateMachine.player.transform.GetComponent<BoxCollider2D>().size *= 2;
         audioSource.Stop();
+        canDamage = true;
     }
 
     protected override string BuildGameObjectName()
