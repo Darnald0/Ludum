@@ -128,12 +128,12 @@ public class StateManager : MonoBehaviour
                 UnstableReady = true;
             }
 
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.P))
             {
                 CurrentState -= fireState;
             }
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.O))
             {
                 CurrentState += fireState;
             }
@@ -172,7 +172,7 @@ public class StateManager : MonoBehaviour
     public void UnstableAnim()
     {
         UnstableReady = false;
-        playerController.life --;
+        playerController.currentLife --;
         CurrentState = 0;
     }
 
