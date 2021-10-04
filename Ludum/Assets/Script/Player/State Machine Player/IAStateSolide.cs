@@ -36,9 +36,9 @@ public class IAStateSolide : AIAState
         if (shot)
         {
             arrow.SetActive(false);
-            if (!touchWall)
+            if (!touchWall || _stateMachine.playerController.rb2D.velocity == new Vector2(0,0))
             {
-                _stateMachine.playerController.rb2D.AddForce(saveDirection * forceThrow);
+                _stateMachine.playerController.rb2D.AddForce(saveDirection*50* forceThrow);
             }
         }
     }
