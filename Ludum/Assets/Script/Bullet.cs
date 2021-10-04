@@ -7,9 +7,16 @@ public class Bullet : MonoBehaviour
     public int speed;
     public int damage;
     [HideInInspector] public bool isPlayerBullet = false;
-
+    [HideInInspector] public bool isRedInk;
+    private SpriteRenderer sr;
+    private void Awake()
+    {
+        sr = transform.GetChild(0).GetComponent<SpriteRenderer>();
+    }
     private void Start()
     {
+        if (isRedInk)
+            sr.color = Color.red;
         StartCoroutine(TimeToDie());
     }
 
@@ -47,8 +54,15 @@ public class Bullet : MonoBehaviour
         {
             if(collision.tag == "Player")
             {
-                StateManager.instance.GetHit(damage, EnemyManager.Type.neutral);
-                Destroy(this.gameObject);
+                if (isRedInk)
+                {
+                    StateManager.instance.GetHit(damage, EnemyManager.Type.neutral);
+                    Destroy(this.gameObject);
+                } else
+                {
+                    StateManager.instance.GetHit(-damage, EnemyManager.Type.neutral);
+                    Destroy(this.gameObject);
+                }
             }
         }
     }

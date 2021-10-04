@@ -14,6 +14,7 @@ public class EnemyManager : MonoBehaviour
     public Pattern pattern;
     public float laserRange = 10.0f;
     public float laserDamage = 0.1f;
+    public float contactDamage = 5.0f;
 
     public float diagonaleAngle;
     public float stationnaireDistance;
@@ -31,6 +32,7 @@ public class EnemyManager : MonoBehaviour
     public Sprite solid;
     public Sprite gazeous;
     public SpriteRenderer spriteRenderer;
+    public bool isRedInk;
 
     public bool disableBool;
 
@@ -88,7 +90,7 @@ public class EnemyManager : MonoBehaviour
                         Debug.Log("shoot");
                         Quaternion rotation = Quaternion.AngleAxis(-90, Vector3.forward);
                         GameObject save = Instantiate(bulletPrefab, transform.position, rotation);
-
+                        save.GetComponent<Bullet>().isRedInk = isRedInk;
                         waitCD = bulletCD;
                     }
                 }
@@ -209,6 +211,7 @@ public class EnemyManager : MonoBehaviour
                         Quaternion rotation = Quaternion.AngleAxis(-90, Vector3.forward);
 
                         GameObject save = Instantiate(bulletPrefab, transform.position, rotation);
+                        save.GetComponent<Bullet>().isRedInk = isRedInk;
                         waitCD = bulletCD;
                     }
                     break;
@@ -255,6 +258,29 @@ public class EnemyManager : MonoBehaviour
             }
             lineRenderer.enabled = false;
             timerStop = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.tag == "Player")
+        {
+            collision.transform.GetComponent<StateManager>().GetHit(contactDamage, EnemyType);
+            //switch (EnemyType)
+            //{
+            //    case Type.neutral:
+            //        SM.GetHit(contactDamage, EnemyType);
+            //        Destroy(this);
+            //        break;
+            //    case Type.solid:
+            //        SM.GetHit(contactDamage, EnemyType);
+            //        Destroy(this);
+            //        break;
+            //    case Type.gaseous:
+            //        SM.GetHit(contactDamage, EnemyType);
+            //        Destroy(this);
+            //        break;
+            //}
         }
     }
 

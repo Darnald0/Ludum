@@ -25,6 +25,8 @@ public class EnemyManagerEditor : Editor
     SerializedProperty zigzagsharpTime;
     SerializedProperty bulletPrefab;
     SerializedProperty laserDamage;
+    SerializedProperty contactDamage;
+    SerializedProperty isRedInk;
 
     private void OnEnable()
     {
@@ -47,6 +49,8 @@ public class EnemyManagerEditor : Editor
         zigzagsharpTime = serializedObject.FindProperty("zigzagsharpTime");
         bulletPrefab = serializedObject.FindProperty("bulletPrefab");
         laserDamage = serializedObject.FindProperty("laserDamage");
+        contactDamage = serializedObject.FindProperty("contactDamage");
+        isRedInk = serializedObject.FindProperty("isRedInk");
     }
     override public void OnInspectorGUI()
     {
@@ -54,6 +58,7 @@ public class EnemyManagerEditor : Editor
         EditorGUILayout.PropertyField(hp);
         EditorGUILayout.PropertyField(scoreValue);
         EditorGUILayout.PropertyField(speed);
+        EditorGUILayout.PropertyField(contactDamage);
         EditorGUILayout.Space();
 
         EditorGUILayout.PropertyField(enemyType);
@@ -70,8 +75,8 @@ public class EnemyManagerEditor : Editor
             switch (myScript.EnemyType)
             {
                 case EnemyManager.Type.neutral:
+                    EditorGUILayout.PropertyField(isRedInk);
                     EditorGUILayout.PropertyField(bulletCD);
-
                     //myScript.bulletCD = EditorGUILayout.FloatField("Shoot cooldown in millisecond", myScript.bulletCD);
                     break;
                 case EnemyManager.Type.solid:

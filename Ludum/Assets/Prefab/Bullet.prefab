@@ -49,6 +49,7 @@ MonoBehaviour:
   speed: 30
   damage: 5
   isPlayerBullet: 0
+  isRedInk: 0
 --- !u!58 &-8333654111940871008
 CircleCollider2D:
   m_ObjectHideFlags: 0

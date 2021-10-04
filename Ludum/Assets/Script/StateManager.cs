@@ -144,9 +144,17 @@ public class StateManager : MonoBehaviour
 
     public void GetHit(float value, EnemyManager.Type type)
     {
-        if (type == EnemyManager.Type.gaseous)
+        switch(type)
         {
-            CurrentState += fireState;
+            case EnemyManager.Type.neutral:
+                CurrentState += value;
+                break;
+            case EnemyManager.Type.solid:
+                CurrentState -= value;
+                break;
+            case EnemyManager.Type.gaseous:
+                CurrentState += value;
+                break;
         }
 
         if (type == EnemyManager.Type.neutral)
