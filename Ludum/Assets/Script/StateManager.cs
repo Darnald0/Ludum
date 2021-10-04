@@ -64,81 +64,88 @@ public class StateManager : MonoBehaviour
 
     public void Update()
     {
-        SetUnstable(CurrentState);
-
-        if(CurrentState < MaxStability / 4 && CurrentState > -MaxStability / 4)
+        if (!playerController.end)
         {
-            Tete.sprite = TeteNeutre;
-            stabilityNeutre = true;
-            stabilityGaseous = false;
-            stabilitySolide = false;
-            audioSource.Stop();
-            playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerNeutre;
-        }
+            SetUnstable(CurrentState);
 
-        // il rentre dans le Statu Gazeux
-        if (CurrentState >= MaxStability / 2)
-        {
-            CurrentState += StabilityTimer * Time.deltaTime;
-            if (!audioSource.isPlaying)
+            if (CurrentState < MaxStability / 4 && CurrentState > -MaxStability / 4)
             {
-                audioSource.Play();
+                Tete.sprite = TeteNeutre;
+                stabilityNeutre = true;
+                stabilityGaseous = false;
+                stabilitySolide = false;
+                audioSource.Stop();
+                playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerNeutre;
             }
-            playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerGaz2;
-        }
-        else if (CurrentState >= MaxStability / 4)
-        {
-            Tete.sprite = TeteGazeux;
-            stabilityNeutre = false;
-            stabilityGaseous = true;
-            stabilitySolide = false;
-            CurrentState += StabilityTimer/2 * Time.deltaTime;
-            audioSource.Stop();
-            playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerGaz;
-        }
 
-        // il rentre dans le Statu solide
-        if (CurrentState <= -MaxStability / 2)
-        {
-            CurrentState -= StabilityTimer * Time.deltaTime;
-            if (!audioSource.isPlaying)
+            // il rentre dans le Statu Gazeux
+            if (CurrentState >= MaxStability / 2)
             {
-                audioSource.Play();
-                playerController.anim.enabled = true;
-                Debug.Log("Launch");
+                CurrentState += StabilityTimer * Time.deltaTime;
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                }
+                playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerGaz2;
             }
-            //playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerSolid2;
+            else if (CurrentState >= MaxStability / 4)
+            {
+                Tete.sprite = TeteGazeux;
+                stabilityNeutre = false;
+                stabilityGaseous = true;
+                stabilitySolide = false;
+                CurrentState += StabilityTimer / 2 * Time.deltaTime;
+                audioSource.Stop();
+                playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerGaz;
+            }
+
+            // il rentre dans le Statu solide
+            if (CurrentState <= -MaxStability / 2)
+            {
+                CurrentState -= StabilityTimer * Time.deltaTime;
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                    playerController.anim.enabled = true;
+                    Debug.Log("Launch");
+                }
+                //playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerSolid2;
+            }
+            else if (CurrentState <= -MaxStability / 4)
+            {
+                Tete.sprite = TeteSolide;
+                stabilityNeutre = false;
+                stabilityGaseous = false;
+                stabilitySolide = true;
+                CurrentState -= StabilityTimer / 2 * Time.deltaTime;
+                audioSource.Stop();
+                playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerSolid;
+                playerController.anim.enabled = false;
+            }
+
+            if (CurrentState >= MaxStability || CurrentState <= -MaxStability)
+            {
+                UnstableReady = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                CurrentState -= fireState;
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                CurrentState += fireState;
+            }
+
+            if (UnstableReady)
+            {
+                UnstableAnim();
+            }
         }
-        else if (CurrentState <= -MaxStability / 4)
+        else
         {
-            Tete.sprite = TeteSolide;
-            stabilityNeutre = false;
-            stabilityGaseous = false;
-            stabilitySolide = true;
-            CurrentState -= StabilityTimer/2 * Time.deltaTime;
             audioSource.Stop();
-            playerController.gameObject.GetComponentInChildren<SpriteRenderer>().sprite = playerSolid;
-            playerController.anim.enabled = false;
-        }
-
-        if (CurrentState >= MaxStability || CurrentState <= -MaxStability)
-        {
-            UnstableReady = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CurrentState -= fireState;
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            CurrentState += fireState;
-        }
-
-        if (UnstableReady)
-        {
-            UnstableAnim();
         }
     }
 

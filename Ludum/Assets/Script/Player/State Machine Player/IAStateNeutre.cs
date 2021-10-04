@@ -18,9 +18,16 @@ public class IAStateNeutre : AIAState
 
     public override void StateUpdate()
     {
-        float hz = Input.GetAxis("Horizontal");
-        float vrt = Input.GetAxis("Vertical");
-        _stateMachine.playerController.rb2D.velocity = new Vector2(hz * speed, vrt * speed) * Time.deltaTime;
+        if (!_stateMachine.playerController.end)
+        {
+            float hz = Input.GetAxis("Horizontal");
+            float vrt = Input.GetAxis("Vertical");
+            _stateMachine.playerController.rb2D.velocity = new Vector2(hz * speed, vrt * speed) * Time.deltaTime;
+        }
+        else
+        {
+            audioSource.Stop();
+        }
     }
 
     public override void Shoot(Vector2 mouseDirection)

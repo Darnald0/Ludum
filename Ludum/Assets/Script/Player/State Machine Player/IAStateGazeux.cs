@@ -31,129 +31,136 @@ public class IAStateGazeux : AIAState
 
     public override void StateUpdate()
     {
-        float hz = Input.GetAxis("Horizontal");
-        float vrt = Input.GetAxis("Vertical");
-        #region MovementHorizontal
-        if (hz<0 && speedHz > -maxSpeed)
+        if (!_stateMachine.playerController.end)
         {
-            speedHz = speedHz - acceleration * Time.deltaTime* timeMultipicateur;
-            if (speedHz < -maxSpeed)
+            float hz = Input.GetAxis("Horizontal");
+            float vrt = Input.GetAxis("Vertical");
+            #region MovementHorizontal
+            if (hz < 0 && speedHz > -maxSpeed)
             {
-                speedHz = -maxSpeed;
-            }
-        }
-        else if(hz>0 && speedHz<maxSpeed)
-        {
-            speedHz = speedHz + acceleration * Time.deltaTime* timeMultipicateur;
-            if (speedHz > maxSpeed)
-            {
-                speedHz = maxSpeed;
-            }
-        }
-        else if (hz == 0 && speedHz != 0)
-        {
-            if (speedHz > 0)
-            {
-                speedHz = speedHz - deceleration * Time.deltaTime* timeMultipicateur;
-                if (speedHz < 0)
+                speedHz = speedHz - acceleration * Time.deltaTime * timeMultipicateur;
+                if (speedHz < -maxSpeed)
                 {
-                    speedHz = 0;
+                    speedHz = -maxSpeed;
                 }
             }
-            else if (speedHz < 0)
+            else if (hz > 0 && speedHz < maxSpeed)
             {
-                speedHz = speedHz + deceleration * Time.deltaTime* timeMultipicateur;
+                speedHz = speedHz + acceleration * Time.deltaTime * timeMultipicateur;
+                if (speedHz > maxSpeed)
+                {
+                    speedHz = maxSpeed;
+                }
+            }
+            else if (hz == 0 && speedHz != 0)
+            {
                 if (speedHz > 0)
                 {
-                    speedHz = 0;
+                    speedHz = speedHz - deceleration * Time.deltaTime * timeMultipicateur;
+                    if (speedHz < 0)
+                    {
+                        speedHz = 0;
+                    }
                 }
-            }
-        }
-        #endregion
-        #region MovementVertical
-        if (vrt < 0 && speedVrt > -maxSpeed)
-        {
-            speedVrt = speedVrt - acceleration * Time.deltaTime* timeMultipicateur;
-            if (speedVrt < -maxSpeed)
-            {
-                speedVrt = -maxSpeed;
-            }
-        }
-        else if (vrt > 0 && speedVrt < maxSpeed)
-        {
-            speedVrt = speedVrt + acceleration * Time.deltaTime* timeMultipicateur;
-            if (speedVrt > maxSpeed)
-            {
-                speedVrt = maxSpeed;
-            }
-        }
-        else if(vrt==0 && speedVrt != 0)
-        {
-            if (speedVrt > 0)
-            {
-                speedVrt = speedVrt - deceleration * Time.deltaTime* timeMultipicateur;
-                if (speedVrt < 0)
+                else if (speedHz < 0)
                 {
-                    speedVrt = 0;
+                    speedHz = speedHz + deceleration * Time.deltaTime * timeMultipicateur;
+                    if (speedHz > 0)
+                    {
+                        speedHz = 0;
+                    }
                 }
             }
-            else if (speedVrt < 0)
+            #endregion
+            #region MovementVertical
+            if (vrt < 0 && speedVrt > -maxSpeed)
             {
-                speedVrt = speedVrt + deceleration * Time.deltaTime* timeMultipicateur;
+                speedVrt = speedVrt - acceleration * Time.deltaTime * timeMultipicateur;
+                if (speedVrt < -maxSpeed)
+                {
+                    speedVrt = -maxSpeed;
+                }
+            }
+            else if (vrt > 0 && speedVrt < maxSpeed)
+            {
+                speedVrt = speedVrt + acceleration * Time.deltaTime * timeMultipicateur;
+                if (speedVrt > maxSpeed)
+                {
+                    speedVrt = maxSpeed;
+                }
+            }
+            else if (vrt == 0 && speedVrt != 0)
+            {
                 if (speedVrt > 0)
                 {
-                    speedVrt = 0;
+                    speedVrt = speedVrt - deceleration * Time.deltaTime * timeMultipicateur;
+                    if (speedVrt < 0)
+                    {
+                        speedVrt = 0;
+                    }
                 }
-            }
-        }
-        #endregion
-        if (_stateMachine.playerController.rb2D.velocity.x == 0)
-        {
-            speedHz = 0;
-        }
-        if(_stateMachine.playerController.rb2D.velocity.y == 0)
-        {
-            speedVrt = 0;
-        }
-
-        _stateMachine.playerController.rb2D.velocity = new Vector2(hz + speedHz, vrt + speedVrt) * Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            audioSource.clip = null;
-            audioSource.clip = sound[randomSound];
-            audioSource.Play();
-        }
-
-
-        int layerMask = LayerMask.GetMask("Player","Bullet");
-        layerMask = ~layerMask;
-        if (Input.GetKey(KeyCode.Space))
-        {
-            RaycastHit2D hit = Physics2D.Raycast(_stateMachine.player.transform.position, saveDirection, laserRange, layerMask);
-            Vector3 laserHit;
-            laserHit = hit.point;
-            _lineRenderer.SetPosition(0, _stateMachine.player.transform.position + new Vector3(saveDirection.x*2.5f, saveDirection.y*2.5f, 0));
-            if (hit.collider)
-            {
-                _lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y,0));
-                if(hit.collider.tag == "Enemy" && canDamage)
+                else if (speedVrt < 0)
                 {
-                    hit.collider.GetComponent<EnemyManager>().hp -= damage;
-                    StartCoroutine(canDoDamage());
+                    speedVrt = speedVrt + deceleration * Time.deltaTime * timeMultipicateur;
+                    if (speedVrt > 0)
+                    {
+                        speedVrt = 0;
+                    }
                 }
             }
-            else
+            #endregion
+            if (_stateMachine.playerController.rb2D.velocity.x == 0)
             {
-                _lineRenderer.SetPosition(1, new Vector3(_stateMachine.player.transform.position.x, _stateMachine.player.transform.position.y+saveDirection.y*(laserRange/2), 0));
+                speedHz = 0;
             }
-            _lineRenderer.enabled = true;
+            if (_stateMachine.playerController.rb2D.velocity.y == 0)
+            {
+                speedVrt = 0;
+            }
+
+            _stateMachine.playerController.rb2D.velocity = new Vector2(hz + speedHz, vrt + speedVrt) * Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                audioSource.clip = null;
+                audioSource.clip = sound[randomSound];
+                audioSource.Play();
+            }
+
+
+            int layerMask = LayerMask.GetMask("Player", "Bullet");
+            layerMask = ~layerMask;
+            if (Input.GetKey(KeyCode.Space))
+            {
+                RaycastHit2D hit = Physics2D.Raycast(_stateMachine.player.transform.position, saveDirection, laserRange, layerMask);
+                Vector3 laserHit;
+                laserHit = hit.point;
+                _lineRenderer.SetPosition(0, _stateMachine.player.transform.position + new Vector3(saveDirection.x * 2.5f, saveDirection.y * 2.5f, 0));
+                if (hit.collider)
+                {
+                    _lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
+                    if (hit.collider.tag == "Enemy" && canDamage)
+                    {
+                        hit.collider.GetComponent<EnemyManager>().hp -= damage;
+                        StartCoroutine(canDoDamage());
+                    }
+                }
+                else
+                {
+                    _lineRenderer.SetPosition(1, new Vector3(_stateMachine.player.transform.position.x, _stateMachine.player.transform.position.y + saveDirection.y * (laserRange / 2), 0));
+                }
+                _lineRenderer.enabled = true;
+            }
+            else if (Input.GetKeyUp(KeyCode.Space))
+            {
+                _lineRenderer.enabled = false;
+                audioSource.Stop();
+                randomSound = Random.Range(0, sound.Length);
+            }
         }
-        else if (Input.GetKeyUp(KeyCode.Space))
+        else
         {
-            _lineRenderer.enabled = false;
             audioSource.Stop();
-            randomSound = Random.Range(0, sound.Length);
         }
     }
 
