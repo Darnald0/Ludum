@@ -77,10 +77,19 @@ public class PlayerController : MonoBehaviour
             float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-            _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().arrow.transform.position = transform.position + new Vector3(mouseDirection.normalized.x * 6, mouseDirection.normalized.y * 6, 0);
+            _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().arrow.transform.position = transform.position + new Vector3(mouseDirection.normalized.x * 12, mouseDirection.normalized.y * 12, 0);
             _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().arrow.transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1);
         }
 
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (_stateMachine._currentStateName == "SOLIDE")
+        {
+            _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().touchWall = true;
+        }
     }
 
     void GetDamage(float dmg)
