@@ -12,7 +12,7 @@ public class IAStateGazeux : AIAState
     public float timeMultipicateur;
     private LineRenderer _lineRenderer;
     private Vector2 saveDirection;
-    public Transform laserHit;
+    public int laserRange;
 
     public override void StateStart()
     {
@@ -114,17 +114,18 @@ public class IAStateGazeux : AIAState
         int layerMask=3;
         if (Input.GetKey(KeyCode.X))
         {
-            RaycastHit2D hit = Physics2D.Raycast(_stateMachine.player.transform.position, saveDirection,Mathf.Infinity,layerMask);
-            laserHit.position = hit.point;
+            RaycastHit2D hit = Physics2D.Raycast(_stateMachine.player.transform.position, saveDirection, laserRange, layerMask);
+            Vector3 laserHit;
+            laserHit = hit.point;
             //Debug.DrawLine(_stateMachine.player.transform.position, hit.point);
-            _lineRenderer.SetPosition(0, _stateMachine.player.transform.position + new Vector3(saveDirection.x*2, saveDirection.y*2, 10));
+            _lineRenderer.SetPosition(0, _stateMachine.player.transform.position + new Vector3(saveDirection.x*1.5f, saveDirection.y*1.5f, 0));
             if (hit.collider)
             {
-                _lineRenderer.SetPosition(1, new Vector3(laserHit.position.x, laserHit.position.y,10));
+                _lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y,0));
             }
             else
             {
-                _lineRenderer.SetPosition(1, saveDirection * 50);
+                _lineRenderer.SetPosition(1, new Vector3(_stateMachine.player.transform.position.x, _stateMachine.player.transform.position.y+saveDirection.y*(laserRange/2), 0));
             }
             _lineRenderer.enabled = true;
         }

@@ -5,13 +5,14 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public enum Type { neutral, solid, gaseous };
-    public enum Pattern { MarcheAvant, Diagonale, Stationnaire, ZigZag, Roue, ZigZagSharp};
+    public enum Pattern { MarcheAvant, Diagonale, Stationnaire, ZigZag, Roue, ZigZagSharp };
     public float bulletCD = 1.0f;
     public float laserTickCD = 0.1f;
     public float speed = 2.0f;
     public int scoreValue = 100;
     public Type EnemyType;
     public Pattern pattern;
+    public float laserRange = 10.0f;
 
     public float diagonaleAngle;
     public float stationnaireDistance;
@@ -34,7 +35,6 @@ public class EnemyManager : MonoBehaviour
     private Vector2 stationnaireTargetPos;
     private bool stationnaireStopped = false;
 
-    private bool zigzagDir = false;
     public float zigzagFrequency;
     public float zigzagMagnitude;
 
@@ -47,28 +47,18 @@ public class EnemyManager : MonoBehaviour
     private bool timerStop = false;
     private float waitCount;
     private float waitCD;
+
+    private LineRenderer lineRenderer;
+
     private void Awake()
     {
         roueCenter = transform.position;
         spriteRenderer = GetComponent<SpriteRenderer>();
+        lineRenderer = GetComponent<LineRenderer>();
     }
     private void Start()
     {
-        switch (EnemyType)
-        {
-            case Type.neutral:
-                //spriteRenderer.sprite = neutral;
-                break;
-            case Type.solid:
-                //spriteRenderer.sprite = solid;
-                break;
-            case Type.gaseous:
-                //spriteRenderer.sprite = gazeous;
-                break;
-            default:
-                Debug.Log("Error");
-                break;
-        }
+
         stationnaireTargetPos.x = transform.position.x;
         stationnaireTargetPos.y = transform.position.y - stationnaireDistance;
     }
@@ -82,20 +72,48 @@ public class EnemyManager : MonoBehaviour
         switch (EnemyType)
         {
             case Type.neutral:
+                if(pattern != Pattern.Stationnaire && pattern != Pattern.ZigZagSharp)
+                {
+                    waitCD -= timer;
+                    if (waitCD < 0)
+                    {
+                        Debug.Log("shoot");
+                        Quaternion rotation = Quaternion.AngleAxis(-90, Vector3.forward);
+                        GameObject save = Instantiate(bulletPrefab, transform.position, rotation);
+
+                        waitCD = bulletCD;
+                    }
+                }
                 break;
             case Type.solid:
                 break;
             case Type.gaseous:
-                break;
-            default:
-                Debug.Log("Error");
+                if (pattern != Pattern.Stationnaire && pattern != Pattern.ZigZagSharp)
+                {
+                    int layerMask = 6;
+
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity, layerMask);
+                    Vector3 laserHit = hit.point;
+                    //Debug.DrawLine(transform.position, hit.point);
+                    lineRenderer.SetPosition(0, transform.position + new Vector3(0, -1, 0));
+                    if (hit.collider)
+                    {
+                        lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
+                    }
+                    else
+                    {
+                        lineRenderer.SetPosition(1, new Vector3(transform.position.x, transform.position.y + Vector2.down.y * laserRange, 0));
+                    }
+                    lineRenderer.enabled = true;
+
+                }
                 break;
         }
     }
 
     private void Move()
     {
-        switch(pattern)
+        switch (pattern)
         {
             case Pattern.MarcheAvant:
                 transform.position = new Vector2(transform.position.x, transform.position.y - 1 * speed * Time.deltaTime);
@@ -119,6 +137,7 @@ public class EnemyManager : MonoBehaviour
                 roueAngle += speed * Time.deltaTime;
                 var offset = new Vector2(Mathf.Sin(roueAngle), Mathf.Cos(roueAngle)) * roueRadius;
                 transform.position = roueCenter + offset;
+                //transform.Rotate(Vector3.forward * 50 * Time.deltaTime, Space.Self);
                 break;
             case Pattern.ZigZagSharp:
                 if (zigzagSharpIsAtPos && !timerStop)
@@ -170,7 +189,6 @@ public class EnemyManager : MonoBehaviour
         if (waitCount > 0f)
         {
             timerStop = true;
-            Debug.Log(waitCount);
             waitCount -= timer;
             switch (EnemyType)
             {
@@ -179,13 +197,30 @@ public class EnemyManager : MonoBehaviour
                     if (waitCD < 0)
                     {
                         Debug.Log("shoot");
+                        Quaternion rotation = Quaternion.AngleAxis(-90, Vector3.forward);
+
+                        GameObject save = Instantiate(bulletPrefab, transform.position, rotation);
                         waitCD = bulletCD;
                     }
                     break;
                 case Type.solid:
                     break;
                 case Type.gaseous:
-                    //Beam
+                    int layerMask = 6;
+
+                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity, layerMask);
+                    Vector3 laserHit = hit.point;
+                    //Debug.DrawLine(transform.position, hit.point);
+                    lineRenderer.SetPosition(0, transform.position + new Vector3(0, -transform.up.y * 2, 0));
+                    if (hit.collider)
+                    {
+                        lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y, 0));
+                    }
+                    else
+                    {
+                        lineRenderer.SetPosition(1, new Vector3(transform.position.x, transform.position.y + Vector2.down.y * laserRange, 0));
+                    }
+                    lineRenderer.enabled = true;
                     break;
             }
 
@@ -208,6 +243,7 @@ public class EnemyManager : MonoBehaviour
                 stationnaireStopped = true;
                 pattern = Pattern.MarcheAvant;
             }
+            lineRenderer.enabled = false;
             timerStop = false;
         }
     }
