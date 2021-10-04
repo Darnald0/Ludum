@@ -126,7 +126,8 @@ public class IAStateGazeux : AIAState
         }
 
 
-        int layerMask=3;
+        int layerMask = LayerMask.GetMask("Player","Bullet");
+        layerMask = ~layerMask;
         if (Input.GetKey(KeyCode.Space))
         {
             RaycastHit2D hit = Physics2D.Raycast(_stateMachine.player.transform.position, saveDirection, laserRange, layerMask);
