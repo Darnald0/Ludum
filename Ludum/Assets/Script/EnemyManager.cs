@@ -79,7 +79,7 @@ public class EnemyManager : MonoBehaviour
                     {
                         Debug.Log("shoot");
                         Quaternion rotation = Quaternion.AngleAxis(-90, Vector3.forward);
-                        GameObject save = Instantiate(bulletPrefab, new Vector3(transform.position.x, -Vector2.up.y, transform.position.z), rotation);
+                        GameObject save = Instantiate(bulletPrefab, transform.position, rotation);
 
                         waitCD = bulletCD;
                     }
@@ -137,7 +137,7 @@ public class EnemyManager : MonoBehaviour
                 roueAngle += speed * Time.deltaTime;
                 var offset = new Vector2(Mathf.Sin(roueAngle), Mathf.Cos(roueAngle)) * roueRadius;
                 transform.position = roueCenter + offset;
-                transform.Rotate(Vector3.forward * 50 * Time.deltaTime, Space.Self);
+                //transform.Rotate(Vector3.forward * 50 * Time.deltaTime, Space.Self);
                 break;
             case Pattern.ZigZagSharp:
                 if (zigzagSharpIsAtPos && !timerStop)
@@ -199,7 +199,7 @@ public class EnemyManager : MonoBehaviour
                         Debug.Log("shoot");
                         Quaternion rotation = Quaternion.AngleAxis(-90, Vector3.forward);
 
-                        GameObject save = Instantiate(bulletPrefab, new Vector3(transform.position.x, -Vector2.up.y, transform.position.z), rotation);
+                        GameObject save = Instantiate(bulletPrefab, transform.position, rotation);
                         waitCD = bulletCD;
                     }
                     break;
