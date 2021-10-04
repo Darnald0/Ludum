@@ -104,6 +104,8 @@ MonoBehaviour:
   EnemyType: 1
   pattern: 0
   laserRange: 10
+  laserDamage: 0.1
+  contactDamage: 5
   diagonaleAngle: 0
   stationnaireDistance: 0
   stationnaireTime: 0
@@ -112,12 +114,14 @@ MonoBehaviour:
   zigzagsharpRange: 0
   zigzagsharpTime: 0
   zigzagsharpDistance: 0
+  hp: 1000
   bulletPrefab: {fileID: 2297132012747926877, guid: b1d09fd61651f774e90e5ff8aa03e4c9, type: 3}
   droppedBonus: {fileID: 2297132012747926877, guid: b1d09fd61651f774e90e5ff8aa03e4c9, type: 3}
   neutral: {fileID: 21300000, guid: 06a43f6205445094c9feff68de8a383e, type: 3}
   solid: {fileID: 21300000, guid: 7533ce7e079a76d41852c52e230c8107, type: 3}
   gazeous: {fileID: 21300000, guid: a6b21ff9ae3cab54eba0877a80789be9, type: 3}
   spriteRenderer: {fileID: 0}
+  isRedInk: 0
   disableBool: 0
   zigzagFrequency: 0
   zigzagMagnitude: 0

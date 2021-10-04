@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4cc02a1ca5627b4c93b8c6dc9180b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 30
-  damage: 5
+  speed: 100
+  damage: 100
   isPlayerBullet: 0
   isRedInk: 0
 --- !u!58 &-8333654111940871008
