@@ -47,7 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
-  isPlayerBullet: 1
+  damage: 5
+  isPlayerBullet: 0
 --- !u!58 &-8333654111940871008
 CircleCollider2D:
   m_ObjectHideFlags: 0
