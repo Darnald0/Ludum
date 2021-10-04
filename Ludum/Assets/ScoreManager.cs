@@ -11,7 +11,8 @@ public class ScoreManager : MonoBehaviour
 
     public float pointsPerSecond = 2;
     public TMP_Text scoreText;
-
+    public TMP_Text scoreLose;
+    public TMP_Text scoreWin;
     private double score = 0;
 
     private void Awake()
@@ -26,10 +27,19 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+       score = 0;
+    }
+
     private void Update()
     {
         score += pointsPerSecond * Time.deltaTime;
         scoreText.text = ((long)score).ToString();
+
+        scoreLose.text = ((long)score).ToString();
+
+        scoreWin.text = ((long)score).ToString();
     }
 
     public int getScore()

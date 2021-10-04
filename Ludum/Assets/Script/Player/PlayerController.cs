@@ -11,8 +11,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 mouseDirection = new Vector2(1,0);
     private IAStateMachine _stateMachine;
     public int damage;
-    [HideInInspector]
-    public float life;
+    public float currentLife;
     public float maxLife;
     public StateManager stateManager;
 
@@ -44,7 +43,8 @@ public class PlayerController : MonoBehaviour
         Life1.SetActive(true);
         Life2.SetActive(true);
         Life3.SetActive(true);
-        life = maxLife;
+        currentLife = maxLife;
+        Time.timeScale = 1;
     }
 
     // Update is called once per frame
@@ -146,26 +146,26 @@ public class PlayerController : MonoBehaviour
                 _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().arrow.transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1);
             }
 
-            if (life == 3)
+            if (currentLife == 3)
             {
                 Life1.SetActive(true);
                 Life2.SetActive(true);
                 Life3.SetActive(true);
             }
 
-            if (life == 2)
+            if (currentLife == 2)
             {
                 Life1.SetActive(false);
                 Life2.SetActive(true);
                 Life3.SetActive(true);
             }
-            if (life == 1)
+            if (currentLife == 1)
             {
                 Life1.SetActive(false);
                 Life2.SetActive(false);
                 Life3.SetActive(true);
             }
-            if (life == 0)
+            if (currentLife == 0)
             {
                 Life1.SetActive(false);
                 Life2.SetActive(false);
@@ -193,8 +193,8 @@ public class PlayerController : MonoBehaviour
 
     void GetDamage(float dmg)
     {
-        life -= dmg;
-        if (life <= 0)
+        currentLife -= dmg;
+        if (currentLife <= 0)
         {
             Death();
         }
@@ -204,9 +204,11 @@ public class PlayerController : MonoBehaviour
     {
         end = true;
         loseCanvas.SetActive(true);
+        Time.timeScale = 0;
     }
     void Win()
     {
         winCanvas.SetActive(true);
+        Time.timeScale = 0;
     }
 }
