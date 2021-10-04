@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class StateManager : MonoBehaviour
 {
+    public static StateManager instance;
     public PlayerController playerController;
 
     public int MaxStability;
@@ -42,6 +43,17 @@ public class StateManager : MonoBehaviour
     public Sprite playerSolid;
     public Sprite playerSolid2;
 
+    public void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public void Start()
     {
         CurrentState = 0f;
@@ -127,6 +139,19 @@ public class StateManager : MonoBehaviour
         if (UnstableReady)
         {
             UnstableAnim();
+        }
+    }
+
+    public void GetHit(float value, EnemyManager.Type type)
+    {
+        if (type == EnemyManager.Type.gaseous)
+        {
+            CurrentState += fireState;
+        }
+
+        if (type == EnemyManager.Type.neutral)
+        {
+            CurrentState -= fireState;
         }
     }
 

@@ -13,6 +13,7 @@ public class EnemyManager : MonoBehaviour
     public Type EnemyType;
     public Pattern pattern;
     public float laserRange = 10.0f;
+    public float laserDamage = 0.1f;
 
     public float diagonaleAngle;
     public float stationnaireDistance;
@@ -264,7 +265,7 @@ public class EnemyManager : MonoBehaviour
             laserCD -= timer;
             if (laserCD <= 0)
             {
-                //DO SOMETHING TO PLAYER
+                StateManager.instance.GetHit(laserDamage, EnemyType);
                 laserCD = laserTickCD;
             }
         }

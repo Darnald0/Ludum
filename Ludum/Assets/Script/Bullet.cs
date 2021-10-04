@@ -47,6 +47,7 @@ public class Bullet : MonoBehaviour
         {
             if(collision.tag == "Player")
             {
+                StateManager.instance.GetHit(damage, EnemyManager.Type.neutral);
                 Destroy(this.gameObject);
             }
         }

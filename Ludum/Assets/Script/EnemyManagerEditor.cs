@@ -24,6 +24,7 @@ public class EnemyManagerEditor : Editor
     SerializedProperty zigzagsharpDistance;
     SerializedProperty zigzagsharpTime;
     SerializedProperty bulletPrefab;
+    SerializedProperty laserDamage;
 
     private void OnEnable()
     {
@@ -45,6 +46,7 @@ public class EnemyManagerEditor : Editor
         zigzagsharpDistance = serializedObject.FindProperty("zigzagsharpDistance");
         zigzagsharpTime = serializedObject.FindProperty("zigzagsharpTime");
         bulletPrefab = serializedObject.FindProperty("bulletPrefab");
+        laserDamage = serializedObject.FindProperty("laserDamage");
     }
     override public void OnInspectorGUI()
     {
@@ -77,6 +79,7 @@ public class EnemyManagerEditor : Editor
                     break;
                 case EnemyManager.Type.gaseous:
                     EditorGUILayout.PropertyField(laserTickCD);
+                    EditorGUILayout.PropertyField(laserDamage);
                     EditorGUILayout.PropertyField(laserRange);
                     //myScript.laserTickCD = EditorGUILayout.FloatField("Laser tick cooldown", myScript.laserTickCD);
                     //myScript.laserRange = EditorGUILayout.FloatField("Laser range", myScript.laserRange);
