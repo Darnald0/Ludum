@@ -156,11 +156,6 @@ public class StateManager : MonoBehaviour
                 CurrentState += value;
                 break;
         }
-
-        if (type == EnemyManager.Type.neutral)
-        {
-            CurrentState -= fireState;
-        }
     }
 
     public void SetUnstable(float state)
