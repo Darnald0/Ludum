@@ -266,6 +266,7 @@ public class EnemyManager : MonoBehaviour
         if (collision.transform.tag == "Player")
         {
             collision.transform.GetComponent<StateManager>().GetHit(contactDamage, EnemyType);
+            Destroy(this);
             //switch (EnemyType)
             //{
             //    case Type.neutral:
