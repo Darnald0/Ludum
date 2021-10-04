@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
 
                 if (mouseDirection.y <= 1 && right)
                 {
-                    mouseDirection.y += 1 * Time.deltaTime;
+                    mouseDirection.y += 1 * Time.deltaTime*2;
                     if (mouseDirection.y >= 1)
                     {
                         right = false;
@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (mouseDirection.y >= -1 && !right)
                 {
-                    mouseDirection.y -= 1 * Time.deltaTime;
+                    mouseDirection.y -= 1 * Time.deltaTime*2;
                     if (mouseDirection.y <= -1)
                     {
                         right = true;
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
 
                 if (mouseDirection.x <= 1 && up)
                 {
-                    mouseDirection.x += 1 * Time.deltaTime;
+                    mouseDirection.x += 1 * Time.deltaTime*2;
                     if (mouseDirection.x >= 1)
                     {
                         up = false;
@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (mouseDirection.x >= -1 && !up)
                 {
-                    mouseDirection.x -= 1 * Time.deltaTime;
+                    mouseDirection.x -= 1 * Time.deltaTime*2;
                     if (mouseDirection.x <= -1)
                     {
                         up = true;
