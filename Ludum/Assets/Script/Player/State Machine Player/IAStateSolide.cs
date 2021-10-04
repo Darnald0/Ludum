@@ -30,16 +30,23 @@ public class IAStateSolide : AIAState
 
     public override void StateUpdate()
     {
-        float hz = Input.GetAxis("Horizontal");
-        _stateMachine.playerController.rb2D.velocity = new Vector2(hz * speed, 0) * Time.deltaTime;
-
-        if (shot)
+        if (!_stateMachine.playerController.end)
         {
-            arrow.SetActive(false);
-            if (!touchWall || _stateMachine.playerController.rb2D.velocity == new Vector2(0,0))
+            float hz = Input.GetAxis("Horizontal");
+            _stateMachine.playerController.rb2D.velocity = new Vector2(hz * speed, 0) * Time.deltaTime;
+
+            if (shot)
             {
-                _stateMachine.playerController.rb2D.AddForce(saveDirection*50* forceThrow);
+                arrow.SetActive(false);
+                if (!touchWall || _stateMachine.playerController.rb2D.velocity == new Vector2(0, 0))
+                {
+                    _stateMachine.playerController.rb2D.AddForce(saveDirection * 50 * forceThrow);
+                }
             }
+        }
+        else
+        {
+            audioSource.Stop();
         }
     }
 

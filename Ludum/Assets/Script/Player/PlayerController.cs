@@ -28,6 +28,14 @@ public class PlayerController : MonoBehaviour
 
     private bool right = true;
     private bool up = true;
+
+    public float timerToWin;
+    [HideInInspector]
+    public bool end;
+
+    public GameObject winCanvas;
+    public GameObject loseCanvas;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,121 +50,129 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (Input.GetKey(KeyCode.Space) && _stateMachine._currentStateName != "SOLIDE")
+        if (!end)
         {
-            _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(this.transform.up);
-        }
+            timerToWin -= Time.deltaTime;
 
-        if (stateManager.stabilityNeutre && !StateN)
-        {
-            Debug.Log("Neutre state");
-            _stateMachine.SetState("NEUTRE");
-            StateN = true;
-            StateG = false;
-            StateS = false;
-        }
-
-        if (stateManager.stabilityGaseous && !StateG)
-        {
-            Debug.Log("Gaseous state");
-            _stateMachine.SetState("GAZEUX");
-            StateN = false;
-            StateG = true;
-            StateS = false;
-        }
-
-        if (stateManager.stabilitySolide && !StateS)
-        {
-            Debug.Log("Solide state");
-            _stateMachine.SetState("SOLIDE");
-            StateN = false;
-            StateG = false;
-            StateS = true;
-        }
-
-        if (_stateMachine._currentStateName == "SOLIDE")
-        {
-            //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            //Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, 0));
-            //float distance;
-            //xy.Raycast(ray, out distance);
-            //mousePosition = ray.GetPoint(distance);
-            //mouseDirection = mousePosition - new Vector2(this.transform.position.x, this.transform.position.y);
-
-            if (mouseDirection.y<=1 && right)
+            if (timerToWin <= 0)
             {
-                mouseDirection.y += 1 * Time.deltaTime;
-                if (mouseDirection.y >= 1)
+                end = true;
+                Win();
+            }
+            if (Input.GetKey(KeyCode.Space) && _stateMachine._currentStateName != "SOLIDE")
+            {
+                _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(this.transform.up);
+            }
+
+            if (stateManager.stabilityNeutre && !StateN)
+            {
+                Debug.Log("Neutre state");
+                _stateMachine.SetState("NEUTRE");
+                StateN = true;
+                StateG = false;
+                StateS = false;
+            }
+
+            if (stateManager.stabilityGaseous && !StateG)
+            {
+                Debug.Log("Gaseous state");
+                _stateMachine.SetState("GAZEUX");
+                StateN = false;
+                StateG = true;
+                StateS = false;
+            }
+
+            if (stateManager.stabilitySolide && !StateS)
+            {
+                Debug.Log("Solide state");
+                _stateMachine.SetState("SOLIDE");
+                StateN = false;
+                StateG = false;
+                StateS = true;
+            }
+
+            if (_stateMachine._currentStateName == "SOLIDE")
+            {
+                //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                //Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, 0));
+                //float distance;
+                //xy.Raycast(ray, out distance);
+                //mousePosition = ray.GetPoint(distance);
+                //mouseDirection = mousePosition - new Vector2(this.transform.position.x, this.transform.position.y);
+
+                if (mouseDirection.y <= 1 && right)
                 {
-                    right = false;
+                    mouseDirection.y += 1 * Time.deltaTime;
+                    if (mouseDirection.y >= 1)
+                    {
+                        right = false;
+                    }
                 }
-            }
-            else if(mouseDirection.y >=-1 && !right)
-            {
-                mouseDirection.y -= 1 * Time.deltaTime;
-                if (mouseDirection.y <= -1)
+                else if (mouseDirection.y >= -1 && !right)
                 {
-                    right = true;
+                    mouseDirection.y -= 1 * Time.deltaTime;
+                    if (mouseDirection.y <= -1)
+                    {
+                        right = true;
+                    }
                 }
-            }
 
-            if (mouseDirection.x <= 1 && up)
-            {
-                mouseDirection.x += 1 * Time.deltaTime;
-                if (mouseDirection.x >= 1)
+                if (mouseDirection.x <= 1 && up)
                 {
-                    up = false;
+                    mouseDirection.x += 1 * Time.deltaTime;
+                    if (mouseDirection.x >= 1)
+                    {
+                        up = false;
+                    }
                 }
-            }
-            else if (mouseDirection.x >= -1 && !up)
-            {
-                mouseDirection.x -= 1 * Time.deltaTime;
-                if (mouseDirection.x <= -1)
+                else if (mouseDirection.x >= -1 && !up)
                 {
-                    up = true;
+                    mouseDirection.x -= 1 * Time.deltaTime;
+                    if (mouseDirection.x <= -1)
+                    {
+                        up = true;
+                    }
                 }
+
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(mouseDirection);
+                }
+
+                float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
+                Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+                _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().arrow.transform.position = transform.position + new Vector3(mouseDirection.normalized.x * 12, mouseDirection.normalized.y * 12, 0);
+                _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().arrow.transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1);
             }
 
-            if (Input.GetKey(KeyCode.Space))
+            if (life == 3)
             {
-                _stateMachine._statesDico[_stateMachine._currentStateName].Shoot(mouseDirection);
+                Life1.SetActive(true);
+                Life2.SetActive(true);
+                Life3.SetActive(true);
             }
 
-            float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
-            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
-            _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().arrow.transform.position = transform.position + new Vector3(mouseDirection.normalized.x * 12, mouseDirection.normalized.y * 12, 0);
-            _stateMachine._statesDico[_stateMachine._currentStateName].GetComponent<IAStateSolide>().arrow.transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 1);
+            if (life == 2)
+            {
+                Life1.SetActive(false);
+                Life2.SetActive(true);
+                Life3.SetActive(true);
+            }
+            if (life == 1)
+            {
+                Life1.SetActive(false);
+                Life2.SetActive(false);
+                Life3.SetActive(true);
+            }
+            if (life == 0)
+            {
+                Life1.SetActive(false);
+                Life2.SetActive(false);
+                Life3.SetActive(false);
+                Death();
+            }
         }
-
-        if(life == 3)
-        {
-            Life1.SetActive(true);
-            Life2.SetActive(true);
-            Life3.SetActive(true);
-        }
-
-        if (life == 2)
-        {
-            Life1.SetActive(false);
-            Life2.SetActive(true);
-            Life3.SetActive(true);
-        }
-        if (life == 1)
-        {
-            Life1.SetActive(false);
-            Life2.SetActive(false);
-            Life3.SetActive(true);
-        }
-        if (life == 0)
-        {
-            Life1.SetActive(false);
-            Life2.SetActive(false);
-            Life3.SetActive(false);
-            Death();
-        }
-
     }
 
 
@@ -186,6 +202,11 @@ public class PlayerController : MonoBehaviour
 
     void Death()
     {
-
+        end = true;
+        loseCanvas.SetActive(true);
+    }
+    void Win()
+    {
+        winCanvas.SetActive(true);
     }
 }
