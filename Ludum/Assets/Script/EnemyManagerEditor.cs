@@ -28,6 +28,7 @@ public class EnemyManagerEditor : Editor
                     break;
                 case EnemyManager.Type.gaseous:
                     myScript.laserTickCD = EditorGUILayout.FloatField("Laser tick cooldown", myScript.laserTickCD);
+                    myScript.laserRange = EditorGUILayout.FloatField("Laser range", myScript.laserRange);
                     break;
                 default:
                     Debug.Log("Error");
@@ -71,26 +72,10 @@ public class EnemyManagerEditor : Editor
             {
                 myScript.bulletPrefab = (GameObject)EditorGUILayout.ObjectField("Bullet prefab", myScript.bulletPrefab, typeof(GameObject), true);
             }
-            if (myScript.droppedBonus == null)
-            {
-                myScript.droppedBonus = (GameObject)EditorGUILayout.ObjectField("Bullet prefab", myScript.droppedBonus, typeof(GameObject), true);
-            }
-            if (myScript.neutral == null)
-            {
-                myScript.neutral = (Sprite)EditorGUILayout.ObjectField("Neutral sprite", myScript.neutral, typeof(Sprite), true);
-            }
-            if (myScript.solid == null)
-            {
-                myScript.solid = (Sprite)EditorGUILayout.ObjectField("Solid sprite", myScript.solid, typeof(Sprite), true);
-            }
-            if (myScript.gazeous == null)
-            {
-                myScript.gazeous = (Sprite)EditorGUILayout.ObjectField("Gazeous sprite", myScript.gazeous, typeof(Sprite), true);
-            }
-            if (myScript.spriteRenderer == null)
-            {
-                myScript.spriteRenderer = (SpriteRenderer)EditorGUILayout.ObjectField("Gazeous sprite", myScript.spriteRenderer, typeof(SpriteRenderer), true);
-            }
+            //if (myScript.droppedBonus == null)
+            //{
+            //    myScript.droppedBonus = (GameObject)EditorGUILayout.ObjectField("Bullet prefab", myScript.droppedBonus, typeof(GameObject), true);
+            //}
         }
     }
 }

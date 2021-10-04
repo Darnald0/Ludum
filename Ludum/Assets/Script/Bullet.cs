@@ -6,6 +6,8 @@ public class Bullet : MonoBehaviour
 {
     public int speed;
 
+    public bool isPlayerBullet = false;
+
     private void Start()
     {
         StartCoroutine(TimeToDie());
@@ -26,9 +28,21 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag != "Player")
+        if (isPlayerBullet)
         {
-            Destroy(this.gameObject);
+            if(collision.tag != "Player")
+            {
+                Destroy(this.gameObject);
+            }
+
+        }
+
+        if (!isPlayerBullet)
+        {
+            if(collision.tag == "Player")
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 }
