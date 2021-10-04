@@ -48,6 +48,10 @@ public class IAStateNeutre : AIAState
     {
         StopAllCoroutines();
         canShoot = true;
+        if (audioSource)
+        {
+            audioSource.Stop();
+        }
     }
 
     protected override string BuildGameObjectName()

@@ -78,6 +78,8 @@ public class IAStateSolide : AIAState
 
         _stateMachine.playerController.rb2D.angularDrag = 0.05f;
         _stateMachine.playerController.rb2D.sharedMaterial = null;
+        audioSource.Stop();
+        _stateMachine.playerController.anim.enabled = false;
     }
 
     protected override string BuildGameObjectName()

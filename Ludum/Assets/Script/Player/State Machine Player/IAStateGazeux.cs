@@ -131,7 +131,7 @@ public class IAStateGazeux : AIAState
             Vector3 laserHit;
             laserHit = hit.point;
             //Debug.DrawLine(_stateMachine.player.transform.position, hit.point);
-            _lineRenderer.SetPosition(0, _stateMachine.player.transform.position + new Vector3(saveDirection.x*1.5f, saveDirection.y*1.5f, 0));
+            _lineRenderer.SetPosition(0, _stateMachine.player.transform.position + new Vector3(saveDirection.x*2.5f, saveDirection.y*2.5f, 0));
             if (hit.collider)
             {
                 _lineRenderer.SetPosition(1, new Vector3(laserHit.x, laserHit.y,0));
@@ -159,6 +159,7 @@ public class IAStateGazeux : AIAState
     {
         _lineRenderer.enabled = false;
         _stateMachine.player.transform.GetComponent<BoxCollider2D>().size *= 2;
+        audioSource.Stop();
     }
 
     protected override string BuildGameObjectName()
